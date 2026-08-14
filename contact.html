@@ -1,0 +1,592 @@
+<!doctype html>
+<html class="light" lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>お問い合わせ - Liquid</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary-fixed-dim": "#fface9",
+              "on-primary-container": "#ffa5e8",
+              "surface-container-highest": "#f0dde7",
+              "surface-container": "#fce9f3",
+              "on-surface": "#23191f",
+              "surface-bright": "#fff7f9",
+              "on-primary-fixed-variant": "#840077",
+              "on-tertiary": "#ffffff",
+              "on-tertiary-fixed-variant": "#3c4d00",
+              "primary-container": "#920883",
+              "outline-variant": "#d8c0ce",
+              "on-primary-fixed": "#3a0033",
+              "on-secondary-fixed": "#1a1c1c",
+              "surface-variant": "#f0dde7",
+              tertiary: "#2f3d00",
+              "secondary-fixed": "#e2e2e2",
+              "secondary-fixed-dim": "#c6c7c6",
+              "secondary-container": "#dfe0e0",
+              background: "#fff7f9",
+              "inverse-surface": "#382d34",
+              "on-surface-variant": "#53424d",
+              "surface-tint": "#a52393",
+              "surface-dim": "#e7d5df",
+              "primary-fixed": "#ffd7f0",
+              "on-secondary": "#ffffff",
+              "on-primary": "#ffffff",
+              "on-tertiary-fixed": "#161f00",
+              "inverse-on-surface": "#ffecf5",
+              "surface-container-lowest": "#ffffff",
+              "on-error-container": "#93000a",
+              "on-secondary-fixed-variant": "#454747",
+              "error-container": "#ffdad6",
+              "tertiary-fixed": "#d4ed8b",
+              "on-background": "#23191f",
+              error: "#ba1a1a",
+              "inverse-primary": "#fface9",
+              "on-secondary-container": "#616363",
+              "tertiary-container": "#435600",
+              "tertiary-fixed-dim": "#b8d072",
+              "surface-container-high": "#f6e3ed",
+              secondary: "#5d5f5f",
+              "on-tertiary-container": "#b3cb6d",
+              "on-error": "#ffffff",
+              "surface-container-low": "#fff0f7",
+              surface: "#fff7f9",
+              outline: "#86717e",
+              primary: "#6c0061",
+            },
+            borderRadius: {
+              DEFAULT: "0.25rem",
+              lg: "0.5rem",
+              xl: "0.75rem",
+              full: "9999px",
+            },
+            spacing: {
+              "margin-desktop": "40px",
+              "stack-sm": "12px",
+              gutter: "24px",
+              "stack-md": "24px",
+              "container-max-width": "1200px",
+              unit: "8px",
+              "margin-mobile": "16px",
+              "stack-lg": "48px",
+            },
+            fontFamily: {
+              "label-md": ["Hanken Grotesk"],
+              "body-md": ["Hanken Grotesk"],
+              "headline-md": ["Hanken Grotesk"],
+              "headline-lg-mobile": ["Hanken Grotesk"],
+              "body-lg": ["Hanken Grotesk"],
+              "headline-sm": ["Hanken Grotesk"],
+              "label-sm": ["Hanken Grotesk"],
+              "headline-lg": ["Hanken Grotesk"],
+            },
+            fontSize: {
+              "label-md": [
+                "14px",
+                {
+                  lineHeight: "20px",
+                  letterSpacing: "0.01em",
+                  fontWeight: "600",
+                },
+              ],
+              "body-md": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+              "headline-md": [
+                "24px",
+                { lineHeight: "32px", fontWeight: "600" },
+              ],
+              "headline-lg-mobile": [
+                "24px",
+                { lineHeight: "32px", fontWeight: "700" },
+              ],
+              "body-lg": ["18px", { lineHeight: "28px", fontWeight: "400" }],
+              "headline-sm": [
+                "20px",
+                { lineHeight: "28px", fontWeight: "600" },
+              ],
+              "label-sm": ["12px", { lineHeight: "16px", fontWeight: "500" }],
+              "headline-lg": [
+                "48px",
+                {
+                  lineHeight: "56px",
+                  letterSpacing: "-0.02em",
+                  fontWeight: "800",
+                },
+              ],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        background-color: #fff7f9;
+      }
+      .neumorphic-raised {
+        box-shadow:
+          10px 10px 20px #e6dee3,
+          -10px -10px 20px #ffffff;
+        border: 1px solid rgba(255, 255, 255, 0.5);
+      }
+      .neumorphic-sunken {
+        box-shadow:
+          inset 6px 6px 12px #e6dee3,
+          inset -6px -6px 12px #ffffff;
+      }
+      .neumorphic-button-hover:hover {
+        box-shadow:
+          12px 12px 24px #dfd7dc,
+          -12px -12px 24px #ffffff;
+        transform: translateY(-2px);
+      }
+      .neumorphic-button-active:active {
+        box-shadow:
+          inset 4px 4px 8px #e6dee3,
+          inset -4px -4px 8px #ffffff;
+        transform: translateY(1px);
+      }
+      .glassmorphism {
+        background: rgba(255, 247, 249, 0.7);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        box-shadow: 0 8px 32px 0 rgba(146, 8, 131, 0.05);
+      }
+      /* 入力欄: forms プラグインの既定リングを、サイト配色に合わせる */
+      .field {
+        background: rgba(255, 255, 255, 0.6);
+        border: 1px solid #d8c0ce;
+        border-radius: 0.75rem;
+        transition:
+          border-color 0.15s ease,
+          box-shadow 0.15s ease;
+      }
+      .field:focus {
+        outline: none;
+        border-color: #920883;
+        box-shadow: 0 0 0 3px rgba(146, 8, 131, 0.15);
+      }
+    </style>
+  </head>
+  <body class="bg-background text-on-background font-body-md min-h-screen">
+    <!-- TopNavBar -->
+    <header class="fixed top-0 left-0 w-full z-50 glassmorphism shadow-sm">
+      <div
+        class="flex justify-between items-center px-margin-mobile md:px-margin-desktop h-20 max-w-container-max-width mx-auto"
+      >
+        <a class="flex items-center" href="Liquid_website.html">
+          <img
+            alt="Liquid Logo"
+            class="h-12 w-auto drop-shadow-md"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDqvxjfLsIkUCiY0vzLDsp8ePjUa_2g_HaiEnTZlpdQ3ZwbF-7mCUAy6jzRbVj3UfY1zWkoLVOi4H-iM5Ht23y7I7tmktCbE7I_ONisRpGBzn_A_A8BNoa1csuOuyodw4W3h0D3YilYXChnLvpGZ2NG9heUZBc31wRVsFBV7SJQjNqczQRMOLhTzMd8Rs8c7KeeqFd377sqPcvr1PwnUYyHdVPxMhB0fFCl06LIoBjBfkzFKUV6bnIqw8WIIx4lFCuDf8s"
+          />
+        </a>
+        <nav class="hidden md:flex gap-gutter items-center">
+          <a
+            class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors"
+            href="https://liquid2026.com/term-of-service.pdf?v=4"
+            rel="noopener noreferrer"
+            target="_blank"
+            >利用規約</a
+          >
+          <a
+            class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors"
+            href="https://liquid2026.com/privacy-policy.pdf?v=4"
+            rel="noopener noreferrer"
+            target="_blank"
+            >プライバシーポリシー</a
+          >
+          <a
+            aria-current="page"
+            class="font-label-md text-label-md text-primary font-bold transition-colors"
+            href="contact.html"
+            >お問い合わせ</a
+          >
+        </nav>
+        <!-- モバイル用ハンバーガーボタン -->
+        <button
+          aria-controls="mobileMenu"
+          aria-expanded="false"
+          aria-label="メニューを開く"
+          class="md:hidden flex items-center justify-center w-11 h-11 -mr-2 rounded-full text-primary hover:bg-primary/5 active:bg-primary/10 transition-colors"
+          id="menuToggle"
+          type="button"
+        >
+          <span class="material-symbols-outlined text-[30px]" id="menuIcon"
+            >menu</span
+          >
+        </button>
+      </div>
+      <!-- モバイル用ドロップダウン（md以上ではラッパーごと非表示） -->
+      <div class="md:hidden">
+        <nav
+          class="hidden bg-background/95 border-t border-outline-variant/30 px-margin-mobile pb-3 shadow-lg"
+          id="mobileMenu"
+        >
+          <a
+            class="flex items-center justify-between gap-3 py-4 border-b border-outline-variant/20 font-label-md text-[16px] text-on-surface-variant hover:text-primary transition-colors"
+            href="https://liquid2026.com/term-of-service.pdf?v=4"
+            rel="noopener noreferrer"
+            target="_blank"
+            >利用規約
+            <span class="material-symbols-outlined text-[20px] opacity-60"
+              >open_in_new</span
+            >
+          </a>
+          <a
+            class="flex items-center justify-between gap-3 py-4 border-b border-outline-variant/20 font-label-md text-[16px] text-on-surface-variant hover:text-primary transition-colors"
+            href="https://liquid2026.com/privacy-policy.pdf?v=4"
+            rel="noopener noreferrer"
+            target="_blank"
+            >プライバシーポリシー
+            <span class="material-symbols-outlined text-[20px] opacity-60"
+              >open_in_new</span
+            >
+          </a>
+          <a
+            aria-current="page"
+            class="flex items-center justify-between gap-3 py-4 font-label-md text-[16px] text-primary font-bold transition-colors"
+            href="contact.html"
+            >お問い合わせ
+            <span class="material-symbols-outlined text-[20px] opacity-60"
+              >chevron_right</span
+            >
+          </a>
+        </nav>
+      </div>
+    </header>
+
+    <main
+      class="pt-32 md:pt-40 pb-12 px-margin-mobile md:px-margin-desktop max-w-container-max-width mx-auto flex flex-col gap-stack-md"
+    >
+      <!-- Heading -->
+      <div class="w-full max-w-3xl mx-auto">
+        <h1
+          class="font-headline-lg text-[29px] font-bold text-primary mb-2 text-center"
+        >
+          お問い合わせ
+        </h1>
+        <div class="h-[2px] w-16 bg-primary mb-6 mx-auto"></div>
+        <p class="text-on-surface-variant text-[17px] text-center mb-8">
+          サービス内容・料金・お手続きについてのご質問を承っております。<br
+            class="hidden sm:block"
+          />
+          内容を確認のうえ、通常2〜3営業日以内にご返信いたします。
+        </p>
+      </div>
+
+      <!-- Form -->
+      <div class="w-full max-w-3xl mx-auto">
+        <form
+          class="neumorphic-raised rounded-2xl p-6 md:p-10 bg-white/50 flex flex-col gap-6"
+          id="contactForm"
+          novalidate
+        >
+          <div class="flex flex-col gap-2">
+            <label
+              class="font-label-md text-[15px] font-bold text-on-background"
+              for="name"
+            >
+              お名前
+              <span class="text-error font-normal">*</span>
+            </label>
+            <input
+              autocomplete="name"
+              class="field w-full px-4 py-3 text-[16px] text-on-background"
+              id="name"
+              name="name"
+              placeholder="山田 太郎"
+              required
+              type="text"
+            />
+          </div>
+
+          <div class="flex flex-col gap-2">
+            <label
+              class="font-label-md text-[15px] font-bold text-on-background"
+              for="email"
+            >
+              メールアドレス
+              <span class="text-error font-normal">*</span>
+            </label>
+            <input
+              autocomplete="email"
+              class="field w-full px-4 py-3 text-[16px] text-on-background"
+              id="email"
+              name="email"
+              placeholder="you@example.com"
+              required
+              type="email"
+            />
+          </div>
+
+          <div class="flex flex-col gap-2">
+            <label
+              class="font-label-md text-[15px] font-bold text-on-background"
+              for="category"
+            >
+              お問い合わせ種別
+            </label>
+            <select
+              class="field w-full px-4 py-3 text-[16px] text-on-background"
+              id="category"
+              name="category"
+            >
+              <option>サービス内容について</option>
+              <option>料金・お支払いについて</option>
+              <option>技術的なご質問</option>
+              <option>提携・取材のご相談</option>
+              <option>その他</option>
+            </select>
+          </div>
+
+          <div class="flex flex-col gap-2">
+            <label
+              class="font-label-md text-[15px] font-bold text-on-background"
+              for="message"
+            >
+              お問い合わせ内容
+              <span class="text-error font-normal">*</span>
+            </label>
+            <textarea
+              class="field w-full px-4 py-3 text-[16px] text-on-background resize-y"
+              id="message"
+              name="message"
+              placeholder="ご質問・ご相談の内容をご記入ください。"
+              required
+              rows="7"
+            ></textarea>
+          </div>
+
+          <label class="flex items-start gap-3 cursor-pointer">
+            <input
+              class="mt-1 w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary/30 shrink-0"
+              id="agree"
+              name="agree"
+              type="checkbox"
+            />
+            <span class="text-[15px] text-on-surface-variant leading-relaxed">
+              <a
+                class="text-primary font-bold underline underline-offset-2"
+                href="https://liquid2026.com/privacy-policy.pdf?v=4"
+                rel="noopener noreferrer"
+                target="_blank"
+                >プライバシーポリシー</a
+              >に同意のうえ送信します。
+            </span>
+          </label>
+
+          <div
+            aria-live="polite"
+            class="hidden rounded-xl px-4 py-3 text-[15px] leading-relaxed"
+            id="formStatus"
+          ></div>
+
+          <button
+            class="self-start bg-primary text-white font-label-md text-[17px] py-4 px-10 rounded-full shadow-[0_8px_16px_rgba(146,8,131,0.25)] hover:shadow-[0_12px_24px_rgba(146,8,131,0.4)] transform hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2"
+            type="submit"
+          >
+            <span class="material-symbols-outlined text-[22px]">send</span>
+            送信する
+          </button>
+        </form>
+      </div>
+
+      <!-- Direct contact -->
+      <div class="w-full max-w-3xl mx-auto">
+        <div
+          class="glassmorphism rounded-2xl p-6 md:p-8 flex flex-col sm:flex-row sm:items-center gap-4"
+        >
+          <span class="material-symbols-outlined text-primary text-[36px]"
+            >mail</span
+          >
+          <div>
+            <p
+              class="font-label-md text-[17px] font-bold text-on-background mb-1"
+            >
+              メールで直接お問い合わせ
+            </p>
+            <p class="text-[15px] text-on-surface-variant leading-relaxed">
+              フォームがご利用いただけない場合は
+              <a
+                class="text-primary font-bold underline underline-offset-2"
+                id="directMail"
+                href="mailto:info@liquid2026.com"
+                >info@liquid2026.com</a
+              >
+              宛にご連絡ください。
+            </p>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer
+      class="w-full py-stack-lg px-margin-mobile md:px-margin-desktop flex flex-col md:flex-row justify-between items-center max-w-container-max-width mx-auto bg-background border-t border-outline-variant/30"
+    >
+      <div class="flex items-center gap-4 mb-6 md:mb-0">
+        <img
+          alt="Liquid Logo"
+          class="h-8 w-auto grayscale opacity-70"
+          src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZafytXPSeLow3e7PuYTerYndoU06X7mHUo636EZc-pGfKia6wrgEPQO5A4Yw1e9pZGsuPIKP6uRe1Jr5MwhqXCNS3hveU2UNe1Fmkfrx1U4HjfnT9ViML6hRF_mJ0nEklMbxUD-jn-lAq3v_LdSIXJa46KPCsCWZQAHW11jf7hwQ1iVZ7peiys6o5ebQCSgeMtQCWt7q8ACE0xtEjt5f0ffZ3AOqf9R_3fbkFlglFnwl74oI-y6ujL1fyRaAeRHoElDk"
+        />
+        <div class="font-label-sm text-on-surface-variant">
+          © 2026 Liquid. Optimizing DeFi for beginners.
+        </div>
+      </div>
+      <nav class="flex flex-wrap gap-x-8 gap-y-4 justify-center">
+        <a
+          class="font-label-sm text-on-surface-variant hover:text-primary transition-colors"
+          href="https://liquid2026.com/term-of-service.pdf?v=4"
+          rel="noopener noreferrer"
+          target="_blank"
+          >利用規約</a
+        >
+        <a
+          class="font-label-sm text-on-surface-variant hover:text-primary transition-colors"
+          href="https://liquid2026.com/privacy-policy.pdf?v=4"
+          rel="noopener noreferrer"
+          target="_blank"
+          >プライバシーポリシー</a
+        >
+        <a
+          class="font-label-sm text-on-surface-variant hover:text-primary transition-colors"
+          href="contact.html"
+          >お問い合わせ</a
+        >
+      </nav>
+    </footer>
+
+    <script>
+      // =====================================================================
+      // 送信先アドレス。実際の受信用アドレスに差し替えてください。
+      // =====================================================================
+      const CONTACT_EMAIL = "info@liquid2026.com";
+
+      document.addEventListener("DOMContentLoaded", function () {
+        // =====================================================
+        // モバイル用ハンバーガーメニュー
+        // =====================================================
+        const menuToggle = document.getElementById("menuToggle");
+        const mobileMenu = document.getElementById("mobileMenu");
+        const menuIcon = document.getElementById("menuIcon");
+
+        if (menuToggle && mobileMenu && menuIcon) {
+          const setMenu = function (open) {
+            mobileMenu.classList.toggle("hidden", !open);
+            menuToggle.setAttribute("aria-expanded", open ? "true" : "false");
+            menuToggle.setAttribute(
+              "aria-label",
+              open ? "メニューを閉じる" : "メニューを開く",
+            );
+            menuIcon.textContent = open ? "close" : "menu";
+          };
+
+          menuToggle.addEventListener("click", function (e) {
+            e.stopPropagation();
+            setMenu(mobileMenu.classList.contains("hidden"));
+          });
+
+          mobileMenu.querySelectorAll("a").forEach(function (link) {
+            link.addEventListener("click", function () {
+              setMenu(false);
+            });
+          });
+
+          document.addEventListener("click", function (e) {
+            if (
+              !mobileMenu.contains(e.target) &&
+              !menuToggle.contains(e.target)
+            ) {
+              setMenu(false);
+            }
+          });
+
+          document.addEventListener("keydown", function (e) {
+            if (e.key === "Escape") setMenu(false);
+          });
+        }
+
+        const form = document.getElementById("contactForm");
+        const statusEl = document.getElementById("formStatus");
+        const directMail = document.getElementById("directMail");
+
+        directMail.href = "mailto:" + CONTACT_EMAIL;
+        directMail.textContent = CONTACT_EMAIL;
+
+        function showStatus(message, kind) {
+          statusEl.textContent = message;
+          statusEl.className =
+            "rounded-xl px-4 py-3 text-[15px] leading-relaxed " +
+            (kind === "error"
+              ? "bg-error-container text-on-error-container"
+              : "bg-primary/10 text-primary font-bold");
+        }
+
+        form.addEventListener("submit", function (e) {
+          e.preventDefault();
+
+          const name = form.name.value.trim();
+          const email = form.email.value.trim();
+          const category = form.category.value;
+          const message = form.message.value.trim();
+
+          if (!name || !email || !message) {
+            showStatus("必須項目（*）をすべてご入力ください。", "error");
+            return;
+          }
+          if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            showStatus("メールアドレスの形式をご確認ください。", "error");
+            return;
+          }
+          if (!form.agree.checked) {
+            showStatus(
+              "プライバシーポリシーへの同意にチェックを入れてください。",
+              "error",
+            );
+            return;
+          }
+
+          const subject = "[お問い合わせ] " + category + " / " + name;
+          const body =
+            "お名前: " +
+            name +
+            "\nメールアドレス: " +
+            email +
+            "\nお問い合わせ種別: " +
+            category +
+            "\n\n" +
+            message +
+            "\n";
+
+          window.location.href =
+            "mailto:" +
+            CONTACT_EMAIL +
+            "?subject=" +
+            encodeURIComponent(subject) +
+            "&body=" +
+            encodeURIComponent(body);
+
+          showStatus(
+            "メールソフトを起動しました。開いた下書きをそのまま送信してください。起動しない場合は " +
+              CONTACT_EMAIL +
+              " 宛に直接ご連絡ください。",
+            "ok",
+          );
+        });
+      });
+    </script>
+  </body>
+</html>

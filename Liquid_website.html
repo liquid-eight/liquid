@@ -1,0 +1,2202 @@
+<!doctype html>
+<html class="light" lang="ja">
+  <head></head>
+  <body class="bg-background text-on-background font-body-md min-h-screen">
+    <svg
+      aria-hidden="true"
+      class="inline-defs-container"
+      style="position: absolute; width: 0; height: 0; overflow: hidden"
+    ></svg>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Liquid - 暗号資産流動性最適化ツール</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary-fixed-dim": "#fface9",
+              "on-primary-container": "#ffa5e8",
+              "surface-container-highest": "#f0dde7",
+              "surface-container": "#fce9f3",
+              "on-surface": "#23191f",
+              "surface-bright": "#fff7f9",
+              "on-primary-fixed-variant": "#840077",
+              "on-tertiary": "#ffffff",
+              "on-tertiary-fixed-variant": "#3c4d00",
+              "primary-container": "#920883",
+              "outline-variant": "#d8c0ce",
+              "on-primary-fixed": "#3a0033",
+              "on-secondary-fixed": "#1a1c1c",
+              "surface-variant": "#f0dde7",
+              tertiary: "#2f3d00",
+              "secondary-fixed": "#e2e2e2",
+              "secondary-fixed-dim": "#c6c7c6",
+              "secondary-container": "#dfe0e0",
+              background: "#fff7f9",
+              "inverse-surface": "#382d34",
+              "on-surface-variant": "#53424d",
+              "surface-tint": "#a52393",
+              "surface-dim": "#e7d5df",
+              "primary-fixed": "#ffd7f0",
+              "on-secondary": "#ffffff",
+              "on-primary": "#ffffff",
+              "on-tertiary-fixed": "#161f00",
+              "inverse-on-surface": "#ffecf5",
+              "surface-container-lowest": "#ffffff",
+              "on-error-container": "#93000a",
+              "on-secondary-fixed-variant": "#454747",
+              "error-container": "#ffdad6",
+              "tertiary-fixed": "#d4ed8b",
+              "on-background": "#23191f",
+              error: "#ba1a1a",
+              "inverse-primary": "#fface9",
+              "on-secondary-container": "#616363",
+              "tertiary-container": "#435600",
+              "tertiary-fixed-dim": "#b8d072",
+              "surface-container-high": "#f6e3ed",
+              secondary: "#5d5f5f",
+              "on-tertiary-container": "#b3cb6d",
+              "on-error": "#ffffff",
+              "surface-container-low": "#fff0f7",
+              surface: "#fff7f9",
+              outline: "#86717e",
+              primary: "#6c0061",
+            },
+            borderRadius: {
+              DEFAULT: "0.25rem",
+              lg: "0.5rem",
+              xl: "0.75rem",
+              full: "9999px",
+            },
+            spacing: {
+              "margin-desktop": "40px",
+              "stack-sm": "12px",
+              gutter: "24px",
+              "stack-md": "24px",
+              "container-max-width": "1200px",
+              unit: "8px",
+              "margin-mobile": "16px",
+              "stack-lg": "48px",
+            },
+            fontFamily: {
+              "label-md": ["Hanken Grotesk"],
+              "body-md": ["Hanken Grotesk"],
+              "headline-md": ["Hanken Grotesk"],
+              "headline-lg-mobile": ["Hanken Grotesk"],
+              "body-lg": ["Hanken Grotesk"],
+              "headline-sm": ["Hanken Grotesk"],
+              "label-sm": ["Hanken Grotesk"],
+              "headline-lg": ["Hanken Grotesk"],
+            },
+            fontSize: {
+              "label-md": [
+                "14px",
+                {
+                  lineHeight: "20px",
+                  letterSpacing: "0.01em",
+                  fontWeight: "600",
+                },
+              ],
+              "body-md": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+              "headline-md": [
+                "24px",
+                { lineHeight: "32px", fontWeight: "600" },
+              ],
+              "headline-lg-mobile": [
+                "24px",
+                { lineHeight: "32px", fontWeight: "700" },
+              ],
+              "body-lg": ["18px", { lineHeight: "28px", fontWeight: "400" }],
+              "headline-sm": [
+                "20px",
+                { lineHeight: "28px", fontWeight: "600" },
+              ],
+              "label-sm": ["12px", { lineHeight: "16px", fontWeight: "500" }],
+              "headline-lg": [
+                "48px",
+                {
+                  lineHeight: "56px",
+                  letterSpacing: "-0.02em",
+                  fontWeight: "800",
+                },
+              ],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        background-color: #fff7f9;
+      }
+      .neumorphic-raised {
+        box-shadow:
+          10px 10px 20px #e6dee3,
+          -10px -10px 20px #ffffff;
+        border: 1px solid rgba(255, 255, 255, 0.5);
+      }
+      .neumorphic-sunken {
+        box-shadow:
+          inset 6px 6px 12px #e6dee3,
+          inset -6px -6px 12px #ffffff;
+      }
+      .neumorphic-button-hover:hover {
+        box-shadow:
+          12px 12px 24px #dfd7dc,
+          -12px -12px 24px #ffffff;
+        transform: translateY(-2px);
+      }
+      .neumorphic-button-active:active {
+        box-shadow:
+          inset 4px 4px 8px #e6dee3,
+          inset -4px -4px 8px #ffffff;
+        transform: translateY(1px);
+      }
+      .glassmorphism {
+        background: rgba(255, 247, 249, 0.7);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        box-shadow: 0 8px 32px 0 rgba(146, 8, 131, 0.05);
+      }
+      .text-gradient {
+        background: linear-gradient(135deg, #920883, #6c0061);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- TopNavBar -->
+    <header class="fixed top-0 left-0 w-full z-50 glassmorphism shadow-sm">
+      <div
+        class="flex justify-between items-center px-margin-mobile md:px-margin-desktop h-20 max-w-container-max-width mx-auto"
+      >
+        <a class="flex items-center" href="#">
+          <img
+            alt="Liquid Logo"
+            class="h-12 w-auto drop-shadow-md"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDqvxjfLsIkUCiY0vzLDsp8ePjUa_2g_HaiEnTZlpdQ3ZwbF-7mCUAy6jzRbVj3UfY1zWkoLVOi4H-iM5Ht23y7I7tmktCbE7I_ONisRpGBzn_A_A8BNoa1csuOuyodw4W3h0D3YilYXChnLvpGZ2NG9heUZBc31wRVsFBV7SJQjNqczQRMOLhTzMd8Rs8c7KeeqFd377sqPcvr1PwnUYyHdVPxMhB0fFCl06LIoBjBfkzFKUV6bnIqw8WIIx4lFCuDf8s"
+          />
+        </a>
+        <nav class="hidden md:flex gap-gutter items-center">
+          <a
+            class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors"
+            href="https://liquid2026.com/term-of-service.pdf?v=4"
+            rel="noopener noreferrer"
+            target="_blank"
+            >利用規約</a
+          >
+          <a
+            class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors"
+            href="https://liquid2026.com/privacy-policy.pdf?v=4"
+            rel="noopener noreferrer"
+            target="_blank"
+            >プライバシーポリシー</a
+          >
+          <a
+            class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors"
+            href="contact.html"
+            >お問い合わせ</a
+          >
+        </nav>
+        <!-- モバイル用ハンバーガーボタン -->
+        <button
+          aria-controls="mobileMenu"
+          aria-expanded="false"
+          aria-label="メニューを開く"
+          class="md:hidden flex items-center justify-center w-11 h-11 -mr-2 rounded-full text-primary hover:bg-primary/5 active:bg-primary/10 transition-colors"
+          id="menuToggle"
+          type="button"
+        >
+          <span class="material-symbols-outlined text-[30px]" id="menuIcon"
+            >menu</span
+          >
+        </button>
+      </div>
+      <!-- モバイル用ドロップダウン（md以上ではラッパーごと非表示） -->
+      <div class="md:hidden">
+        <nav
+          class="hidden bg-background/95 border-t border-outline-variant/30 px-margin-mobile pb-3 shadow-lg"
+          id="mobileMenu"
+        >
+          <a
+            class="flex items-center justify-between gap-3 py-4 border-b border-outline-variant/20 font-label-md text-[16px] text-on-surface-variant hover:text-primary transition-colors"
+            href="https://liquid2026.com/term-of-service.pdf?v=4"
+            rel="noopener noreferrer"
+            target="_blank"
+            >利用規約
+            <span class="material-symbols-outlined text-[20px] opacity-60"
+              >open_in_new</span
+            >
+          </a>
+          <a
+            class="flex items-center justify-between gap-3 py-4 border-b border-outline-variant/20 font-label-md text-[16px] text-on-surface-variant hover:text-primary transition-colors"
+            href="https://liquid2026.com/privacy-policy.pdf?v=4"
+            rel="noopener noreferrer"
+            target="_blank"
+            >プライバシーポリシー
+            <span class="material-symbols-outlined text-[20px] opacity-60"
+              >open_in_new</span
+            >
+          </a>
+          <a
+            class="flex items-center justify-between gap-3 py-4 font-label-md text-[16px] text-on-surface-variant hover:text-primary transition-colors"
+            href="contact.html"
+            >お問い合わせ
+            <span class="material-symbols-outlined text-[20px] opacity-60"
+              >chevron_right</span
+            >
+          </a>
+        </nav>
+      </div>
+    </header>
+    <main
+      class="pt-28 pb-12 px-margin-mobile md:px-margin-desktop max-w-container-max-width mx-auto flex flex-col gap-12"
+    >
+      <!-- Hero Section -->
+      <section
+        class="flex flex-col md:flex-row items-center justify-between gap-stack-lg min-h-[50vh]"
+      >
+        <div
+          class="flex flex-col gap-stack-md w-full md:w-auto max-w-2xl text-left z-10"
+        >
+          <h1
+            class="font-headline-lg text-[32px] md:text-headline-lg font-bold text-primary leading-tight text-center md:text-left"
+          >
+            暗号資産の<span
+              class="inline-block"
+              style="letter-spacing: -0.02em"
+              >新たな運用へ</span
+            >
+          </h1>
+          <p
+            class="font-headline-lg text-[32px] md:text-headline-lg font-bold text-primary opacity-70 -mt-2 md:-mt-4 mb-2 text-center md:text-left"
+          >
+            ～流動性提供～
+          </p>
+          <p
+            class="font-body-lg text-body-lg text-on-surface-variant text-center md:text-left"
+          >
+            LIQUID（リキッド）では、<br class="hidden md:inline" />
+            Uniswap V3の複雑な流動性管理を自動化。<br class="hidden md:inline" />
+            スマートに、そして安全に、あなたの暗号資産のポテンシャルを
+            <br class="hidden md:inline" />
+            最大限に引き出します。
+          </p>
+          <div
+            class="flex flex-col items-center md:flex-row md:flex-wrap md:items-stretch gap-4 mt-stack-sm"
+          >
+            <a
+              class="bg-primary-container text-on-primary-container font-label-md text-label-md py-4 px-8 rounded-full neumorphic-raised neumorphic-button-hover neumorphic-button-active transition-all text-lg shadow-[0_8px_16px_rgba(146,8,131,0.2)] inline-flex items-center justify-center w-full max-w-xs md:w-auto md:max-w-none shrink-0 whitespace-nowrap"
+              href="https://forms.gle/xeVMcscVTMFS7q1t8"
+              rel="noopener noreferrer"
+              target="_blank"
+              >今すぐ始める</a
+            >
+            <button
+              class="bg-surface-container-lowest text-primary font-label-md text-label-md py-4 px-8 rounded-full neumorphic-raised neumorphic-button-hover neumorphic-button-active transition-all text-lg flex items-center justify-center gap-2 w-full max-w-xs md:w-auto md:max-w-none shrink-0 whitespace-nowrap"
+            >
+              <span class="material-symbols-outlined">play_circle</span>
+              紹介動画を見る
+            </button>
+          </div>
+        </div>
+        <div class="relative w-full max-w-lg hidden md:block">
+          <div
+            class="absolute inset-0 bg-primary opacity-5 blur-[100px] rounded-full"
+          ></div>
+          <div
+            class="neumorphic-raised rounded-2xl p-6 relative bg-background/80 backdrop-blur-md"
+          >
+            <div class="flex justify-between items-center mb-4">
+              <span class="font-label-md font-bold text-on-surface-variant"
+                >Live Performance</span
+              >
+              <span class="text-green-500 font-label-sm flex items-center"
+                ><span class="material-symbols-outlined text-sm mr-1"
+                  >trending_up</span
+                >
+                APR 24.5%</span
+              >
+            </div>
+            <div
+              class="h-48 rounded-xl neumorphic-sunken bg-background p-4 relative overflow-hidden flex items-end"
+            >
+              <!-- Decorative minimal chart -->
+              <svg
+                class="w-full h-full preserve-3d"
+                preserveAspectRatio="none"
+                viewBox="0 0 100 50"
+              >
+                <path
+                  d="M0,50 L0,30 Q10,20 20,35 T40,25 T60,40 T80,15 T100,5 L100,50 Z"
+                  fill="url(#hero-gradient)"
+                  opacity="0.8"
+                ></path>
+                <path
+                  d="M0,30 Q10,20 20,35 T40,25 T60,40 T80,15 T100,5"
+                  fill="none"
+                  stroke="#920883"
+                  stroke-width="2"
+                ></path>
+                <defs>
+                  <linearGradient
+                    id="hero-gradient"
+                    x1="0%"
+                    x2="0%"
+                    y1="0%"
+                    y2="100%"
+                  >
+                    <stop
+                      offset="0%"
+                      stop-color="#920883"
+                      stop-opacity="0.4"
+                    ></stop>
+                    <stop
+                      offset="100%"
+                      stop-color="#920883"
+                      stop-opacity="0"
+                    ></stop>
+                  </linearGradient>
+                </defs>
+              </svg>
+            </div>
+            <div class="mt-4 flex justify-between items-center">
+              <div class="flex -space-x-2">
+                <img
+                  alt="Ethereum 公式ロゴ"
+                  class="w-8 h-8 rounded-full bg-white object-cover border-2 border-background z-20"
+                  src="https://coin-images.coingecko.com/coins/images/279/large/ethereum.png?1696501628"
+                />
+                <img
+                  alt="USDC 公式ロゴ"
+                  class="w-8 h-8 rounded-full bg-white object-cover border-2 border-background z-10"
+                  src="https://coin-images.coingecko.com/coins/images/6319/large/USDC.png?1769615602"
+                />
+              </div>
+              <span class="font-label-sm text-on-surface-variant"
+                >Active Pools: ETH/USDC, HYPE/USDC</span
+              >
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- Features: 楽しく・カンタンに・安全に -->
+      <section
+        class="grid grid-cols-1 md:grid-cols-3 gap-gutter -mt-4"
+        id="features"
+      >
+        <!-- Feature 1: 楽しく -->
+        <div
+          class="neumorphic-raised rounded-2xl p-8 flex flex-col gap-4 bg-white/50 items-start"
+        >
+          <div
+            class="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center"
+          >
+            <span class="material-symbols-outlined text-primary text-[40px]"
+              >school</span
+            >
+          </div>
+          <h3
+            class="font-headline-sm font-bold text-on-background text-[22px]"
+          >
+            楽しく
+          </h3>
+          <p class="text-on-surface-variant text-base leading-relaxed">
+            初めての方でも、学びながら暗号資産の運用に少しずつ慣れていけます。導入から、私たちが丁寧にサポートいたします。
+          </p>
+        </div>
+        <!-- Feature 2: カンタンに -->
+        <div
+          class="neumorphic-raised rounded-2xl p-8 flex flex-col gap-4 bg-white/50 items-start"
+        >
+          <div
+            class="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center"
+          >
+            <span class="material-symbols-outlined text-primary text-[40px]"
+              >auto_mode</span
+            >
+          </div>
+          <h3
+            class="font-headline-sm font-bold text-on-background text-[22px]"
+          >
+            カンタンに
+          </h3>
+          <p class="text-on-surface-variant text-base leading-relaxed">
+            最初にご準備いただくだけ。日々の複雑なレンジ管理は自動化されるため、あとは基本的に放置して運用いただけます。
+          </p>
+        </div>
+        <!-- Feature 3: 安全に -->
+        <div
+          class="neumorphic-raised rounded-2xl p-8 flex flex-col gap-4 bg-white/50 items-start"
+        >
+          <div
+            class="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center"
+          >
+            <span class="material-symbols-outlined text-primary text-[40px]"
+              >verified_user</span
+            >
+          </div>
+          <h3
+            class="font-headline-sm font-bold text-on-background text-[22px]"
+          >
+            安全に
+          </h3>
+          <p class="text-on-surface-variant text-base leading-relaxed">
+            資産はお客様ご自身のウォレットで管理。私たちが秘密鍵をお預かりすることはありません。
+          </p>
+        </div>
+      </section>
+      <!-- Market Trends & Chart -->
+      <section class="flex flex-col gap-stack-lg mt-4">
+        <div class="text-center">
+          <h2
+            class="font-headline-lg text-[29px] font-bold text-primary mb-4"
+          >
+            暗号資産マーケット
+          </h2>
+          <p
+            class="text-on-surface-variant text-[19px] font-bold max-w-2xl mx-auto"
+          >
+            巨大な流動性市場の動向をリアルタイムで把握
+          </p>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-gutter">
+          <!-- BTC Card -->
+          <a
+            class="glassmorphism rounded-2xl p-5 md:p-6 flex flex-col gap-3 hover:shadow-lg hover:-translate-y-0.5 transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+            data-coin="bitcoin"
+            href="https://www.coingecko.com/en/coins/bitcoin"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            <div class="flex justify-between items-center">
+              <img
+                alt="Bitcoin 公式ロゴ"
+                class="w-12 h-12 rounded-full shadow-md bg-white object-cover shrink-0"
+                src="https://coin-images.coingecko.com/coins/images/1/large/bitcoin.png?1696501400"
+              />
+              <span
+                class="flex items-center gap-1 font-label-sm text-[17px] font-bold text-on-surface-variant tracking-wide"
+                >BTC
+                <span class="material-symbols-outlined text-[16px] opacity-50"
+                  >open_in_new</span
+                >
+              </span>
+            </div>
+            <div>
+              <div
+                class="font-label-md font-bold text-on-background text-[19px] leading-snug truncate"
+              >
+                Bitcoin
+              </div>
+              <div
+                class="font-headline-lg font-bold text-primary text-[30px] md:text-[34px] leading-none tracking-tight mt-1.5"
+                data-role="price"
+              >
+                $64,230.50
+              </div>
+            </div>
+            <div>
+              <span
+                class="inline-flex items-center gap-1 rounded-full px-3 py-1 text-[17px] font-bold bg-green-500/10 text-green-700"
+                data-role="change"
+              >
+                <span class="material-symbols-outlined text-[18px] leading-none"
+                  >trending_up</span
+                >
+                +2.4%
+              </span>
+            </div>
+          </a>
+          <!-- ETH Card -->
+          <a
+            class="glassmorphism rounded-2xl p-5 md:p-6 flex flex-col gap-3 hover:shadow-lg hover:-translate-y-0.5 transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+            data-coin="ethereum"
+            href="https://www.coingecko.com/en/coins/ethereum"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            <div class="flex justify-between items-center">
+              <img
+                alt="Ethereum 公式ロゴ"
+                class="w-12 h-12 rounded-full shadow-md bg-white object-cover shrink-0"
+                src="https://coin-images.coingecko.com/coins/images/279/large/ethereum.png?1696501628"
+              />
+              <span
+                class="flex items-center gap-1 font-label-sm text-[17px] font-bold text-on-surface-variant tracking-wide"
+                >ETH
+                <span class="material-symbols-outlined text-[16px] opacity-50"
+                  >open_in_new</span
+                >
+              </span>
+            </div>
+            <div>
+              <div
+                class="font-label-md font-bold text-on-background text-[19px] leading-snug truncate"
+              >
+                Ethereum
+              </div>
+              <div
+                class="font-headline-lg font-bold text-primary text-[30px] md:text-[34px] leading-none tracking-tight mt-1.5"
+                data-role="price"
+              >
+                $3,450.20
+              </div>
+            </div>
+            <div>
+              <span
+                class="inline-flex items-center gap-1 rounded-full px-3 py-1 text-[17px] font-bold bg-green-500/10 text-green-700"
+                data-role="change"
+              >
+                <span class="material-symbols-outlined text-[18px] leading-none"
+                  >trending_up</span
+                >
+                +1.8%
+              </span>
+            </div>
+          </a>
+          <!-- HYPE Card -->
+          <a
+            class="glassmorphism rounded-2xl p-5 md:p-6 flex flex-col gap-3 hover:shadow-lg hover:-translate-y-0.5 transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+            data-coin="hyperliquid"
+            href="https://www.coingecko.com/en/coins/hyperliquid"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            <div class="flex justify-between items-center">
+              <img
+                alt="Hyperliquid 公式ロゴ"
+                class="w-12 h-12 rounded-full shadow-md bg-white object-cover shrink-0"
+                src="https://coin-images.coingecko.com/coins/images/50882/large/hyperliquid.jpg?1729431300"
+              />
+              <span
+                class="flex items-center gap-1 font-label-sm text-[17px] font-bold text-on-surface-variant tracking-wide"
+                >HYPE
+                <span class="material-symbols-outlined text-[16px] opacity-50"
+                  >open_in_new</span
+                >
+              </span>
+            </div>
+            <div>
+              <div
+                class="font-label-md font-bold text-on-background text-[19px] leading-snug truncate"
+              >
+                Hyperliquid
+              </div>
+              <div
+                class="font-headline-lg font-bold text-primary text-[30px] md:text-[34px] leading-none tracking-tight mt-1.5"
+                data-role="price"
+              >
+                $56.52
+              </div>
+            </div>
+            <div>
+              <span
+                class="inline-flex items-center gap-1 rounded-full px-3 py-1 text-[17px] font-bold bg-red-500/10 text-red-600"
+                data-role="change"
+              >
+                <span class="material-symbols-outlined text-[18px] leading-none"
+                  >trending_down</span
+                >
+                -1.1%
+              </span>
+            </div>
+          </a>
+          <!-- USO Card -->
+          <a
+            class="glassmorphism rounded-2xl p-5 md:p-6 flex flex-col gap-3 hover:shadow-lg hover:-translate-y-0.5 transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+            data-coin="united-states-oil-fund-ondo-tokenized"
+            href="https://www.coingecko.com/en/coins/united-states-oil-fund-ondo-tokenized"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            <div class="flex justify-between items-center">
+              <img
+                alt="United States Oil Fund 公式ロゴ"
+                class="w-12 h-12 rounded-full shadow-md bg-white object-cover shrink-0"
+                src="https://coin-images.coingecko.com/coins/images/71471/large/usoon_160x160.png?1767892001"
+              />
+              <span
+                class="flex items-center gap-1 font-label-sm text-[17px] font-bold text-on-surface-variant tracking-wide"
+                >USO
+                <span class="material-symbols-outlined text-[16px] opacity-50"
+                  >open_in_new</span
+                >
+              </span>
+            </div>
+            <div>
+              <div
+                class="font-label-md font-bold text-on-background text-[19px] leading-snug truncate"
+              >
+                US Oil Fund
+              </div>
+              <div
+                class="font-headline-lg font-bold text-primary text-[30px] md:text-[34px] leading-none tracking-tight mt-1.5"
+                data-role="price"
+              >
+                $125.66
+              </div>
+            </div>
+            <div>
+              <span
+                class="inline-flex items-center gap-1 rounded-full px-3 py-1 text-[17px] font-bold bg-green-500/10 text-green-700"
+                data-role="change"
+              >
+                <span class="material-symbols-outlined text-[18px] leading-none"
+                  >trending_up</span
+                >
+                +0.6%
+              </span>
+            </div>
+          </a>
+        </div>
+        <!-- LP Pair APR -->
+        <div class="text-center mt-2">
+          <h3 class="font-headline-md text-[21px] font-bold text-primary">
+            流動性提供ペアの24時間APR
+          </h3>
+          <p class="text-on-surface-variant text-[15px] font-bold mt-1">
+            LIQUIDが運用するUniswap V3のレンジ設定と、各プールの実績
+          </p>
+          <p
+            class="font-label-sm text-on-surface-variant/70 text-[13px] mt-1"
+            id="poolAprStatus"
+          >
+            GeckoTerminal APIから取得中…
+          </p>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-gutter">
+          <!-- USDC/WETH (Base) -->
+          <div
+            class="glassmorphism rounded-2xl p-5 md:p-6 flex flex-col gap-4 hover:shadow-lg transition-shadow"
+            data-address="0x6c561B446416E1A00E8E93E221854d6eA4171372"
+            data-fee="0.003"
+            data-network="base"
+            data-pool
+          >
+            <div class="flex items-start justify-between gap-2">
+              <div>
+                <div
+                  class="font-label-md font-bold text-on-background text-[19px] leading-snug"
+                >
+                  USDC/WETH
+                </div>
+                <div class="flex items-center gap-1.5 mt-1.5">
+                  <img
+                    alt=""
+                    class="w-4 h-4 rounded-full bg-white object-cover"
+                    src="https://icons.llamao.fi/icons/chains/rsz_base.jpg"
+                  />
+                  <span class="text-[13px] text-on-surface-variant">Base</span>
+                </div>
+              </div>
+              <span
+                class="shrink-0 rounded-full bg-primary/10 text-primary text-[13px] font-bold px-2.5 py-1"
+                >±7%</span
+              >
+            </div>
+            <div>
+              <div class="text-[13px] text-on-surface-variant mb-1">
+                24時間 手数料APR（プール平均）
+              </div>
+              <div
+                class="font-headline-lg font-bold text-primary text-[30px] leading-none tracking-tight"
+                data-role="apr"
+              >
+                —
+              </div>
+            </div>
+            <div
+              class="flex flex-col gap-1.5 text-[13px] border-t border-outline-variant/40 pt-3"
+            >
+              <div class="flex justify-between gap-2">
+                <span class="text-on-surface-variant">手数料率</span>
+                <span class="font-bold text-on-background">0.3%</span>
+              </div>
+              <div class="flex justify-between gap-2">
+                <span class="text-on-surface-variant">TVL</span>
+                <span class="font-bold text-on-background" data-role="tvl"
+                  >—</span
+                >
+              </div>
+              <div class="flex justify-between gap-2">
+                <span class="text-on-surface-variant">24h 出来高</span>
+                <span class="font-bold text-on-background" data-role="vol"
+                  >—</span
+                >
+              </div>
+            </div>
+            <a
+              class="text-[12px] text-primary hover:underline break-all"
+              href="https://www.geckoterminal.com/base/pools/0x6c561B446416E1A00E8E93E221854d6eA4171372"
+              rel="noopener noreferrer"
+              target="_blank"
+              >0x6c561B…171372</a
+            >
+          </div>
+          <!-- WETH/cbBTC (Base) -->
+          <div
+            class="glassmorphism rounded-2xl p-5 md:p-6 flex flex-col gap-4 hover:shadow-lg transition-shadow"
+            data-address="0x8c7080564B5A792A33Ef2FD473fbA6364d5495e5"
+            data-fee="0.003"
+            data-network="base"
+            data-pool
+          >
+            <div class="flex items-start justify-between gap-2">
+              <div>
+                <div
+                  class="font-label-md font-bold text-on-background text-[19px] leading-snug"
+                >
+                  WETH/cbBTC
+                </div>
+                <div class="flex items-center gap-1.5 mt-1.5">
+                  <img
+                    alt=""
+                    class="w-4 h-4 rounded-full bg-white object-cover"
+                    src="https://icons.llamao.fi/icons/chains/rsz_base.jpg"
+                  />
+                  <span class="text-[13px] text-on-surface-variant">Base</span>
+                </div>
+              </div>
+              <span
+                class="shrink-0 rounded-full bg-primary/10 text-primary text-[13px] font-bold px-2.5 py-1"
+                >±5%</span
+              >
+            </div>
+            <div>
+              <div class="text-[13px] text-on-surface-variant mb-1">
+                24時間 手数料APR（プール平均）
+              </div>
+              <div
+                class="font-headline-lg font-bold text-primary text-[30px] leading-none tracking-tight"
+                data-role="apr"
+              >
+                —
+              </div>
+            </div>
+            <div
+              class="flex flex-col gap-1.5 text-[13px] border-t border-outline-variant/40 pt-3"
+            >
+              <div class="flex justify-between gap-2">
+                <span class="text-on-surface-variant">手数料率</span>
+                <span class="font-bold text-on-background">0.3%</span>
+              </div>
+              <div class="flex justify-between gap-2">
+                <span class="text-on-surface-variant">TVL</span>
+                <span class="font-bold text-on-background" data-role="tvl"
+                  >—</span
+                >
+              </div>
+              <div class="flex justify-between gap-2">
+                <span class="text-on-surface-variant">24h 出来高</span>
+                <span class="font-bold text-on-background" data-role="vol"
+                  >—</span
+                >
+              </div>
+            </div>
+            <a
+              class="text-[12px] text-primary hover:underline break-all"
+              href="https://www.geckoterminal.com/base/pools/0x8c7080564B5A792A33Ef2FD473fbA6364d5495e5"
+              rel="noopener noreferrer"
+              target="_blank"
+              >0x8c7080…5495e5</a
+            >
+          </div>
+          <!-- HYPE/USDC (Unichain) -->
+          <div
+            class="glassmorphism rounded-2xl p-5 md:p-6 flex flex-col gap-4 hover:shadow-lg transition-shadow"
+            data-address="0x5d3e7f5dA38FBf476E8B36E3b90D02FC4C1A08C3"
+            data-fee="0.003"
+            data-network="unichain"
+            data-pool
+          >
+            <div class="flex items-start justify-between gap-2">
+              <div>
+                <div
+                  class="font-label-md font-bold text-on-background text-[19px] leading-snug"
+                >
+                  HYPE/USDC
+                </div>
+                <div class="flex items-center gap-1.5 mt-1.5">
+                  <img
+                    alt=""
+                    class="w-4 h-4 rounded-full bg-white object-cover"
+                    src="https://icons.llamao.fi/icons/chains/rsz_unichain.jpg"
+                  />
+                  <span class="text-[13px] text-on-surface-variant"
+                    >Unichain</span
+                  >
+                </div>
+              </div>
+              <span
+                class="shrink-0 rounded-full bg-primary/10 text-primary text-[13px] font-bold px-2.5 py-1"
+                >±15%</span
+              >
+            </div>
+            <div>
+              <div class="text-[13px] text-on-surface-variant mb-1">
+                24時間 手数料APR（プール平均）
+              </div>
+              <div
+                class="font-headline-lg font-bold text-primary text-[30px] leading-none tracking-tight"
+                data-role="apr"
+              >
+                —
+              </div>
+            </div>
+            <div
+              class="flex flex-col gap-1.5 text-[13px] border-t border-outline-variant/40 pt-3"
+            >
+              <div class="flex justify-between gap-2">
+                <span class="text-on-surface-variant">手数料率</span>
+                <span class="font-bold text-on-background">0.3%</span>
+              </div>
+              <div class="flex justify-between gap-2">
+                <span class="text-on-surface-variant">TVL</span>
+                <span class="font-bold text-on-background" data-role="tvl"
+                  >—</span
+                >
+              </div>
+              <div class="flex justify-between gap-2">
+                <span class="text-on-surface-variant">24h 出来高</span>
+                <span class="font-bold text-on-background" data-role="vol"
+                  >—</span
+                >
+              </div>
+            </div>
+            <a
+              class="text-[12px] text-primary hover:underline break-all"
+              href="https://www.geckoterminal.com/unichain/pools/0x5d3e7f5dA38FBf476E8B36E3b90D02FC4C1A08C3"
+              rel="noopener noreferrer"
+              target="_blank"
+              >0x5d3e7f…1A08C3</a
+            >
+          </div>
+          <!-- USO/USDG (Robinhood Chain) -->
+          <div
+            class="glassmorphism rounded-2xl p-5 md:p-6 flex flex-col gap-4 hover:shadow-lg transition-shadow"
+            data-address="0x02175608F1b5E6b5ed221cCFdC7Be197D111D915"
+            data-fee="0.003"
+            data-network="robinhood"
+            data-pool
+          >
+            <div class="flex items-start justify-between gap-2">
+              <div>
+                <div
+                  class="font-label-md font-bold text-on-background text-[19px] leading-snug"
+                >
+                  USO/USDG
+                </div>
+                <div class="flex items-center gap-1.5 mt-1.5">
+                  <img
+                    alt=""
+                    class="w-4 h-4 rounded-full bg-white object-cover"
+                    src="https://icons.llamao.fi/icons/chains/rsz_robinhood.jpg"
+                  />
+                  <span class="text-[13px] text-on-surface-variant"
+                    >Robinhood Chain</span
+                  >
+                </div>
+              </div>
+              <span
+                class="shrink-0 rounded-full bg-primary/10 text-primary text-[13px] font-bold px-2.5 py-1"
+                >±15%</span
+              >
+            </div>
+            <div>
+              <div class="text-[13px] text-on-surface-variant mb-1">
+                24時間 手数料APR（プール平均）
+              </div>
+              <div
+                class="font-headline-lg font-bold text-primary text-[30px] leading-none tracking-tight"
+                data-role="apr"
+              >
+                —
+              </div>
+            </div>
+            <div
+              class="flex flex-col gap-1.5 text-[13px] border-t border-outline-variant/40 pt-3"
+            >
+              <div class="flex justify-between gap-2">
+                <span class="text-on-surface-variant">手数料率</span>
+                <span class="font-bold text-on-background">0.3%</span>
+              </div>
+              <div class="flex justify-between gap-2">
+                <span class="text-on-surface-variant">TVL</span>
+                <span class="font-bold text-on-background" data-role="tvl"
+                  >—</span
+                >
+              </div>
+              <div class="flex justify-between gap-2">
+                <span class="text-on-surface-variant">24h 出来高</span>
+                <span class="font-bold text-on-background" data-role="vol"
+                  >—</span
+                >
+              </div>
+            </div>
+            <a
+              class="text-[12px] text-primary hover:underline break-all"
+              href="https://www.geckoterminal.com/robinhood/pools/0x02175608F1b5E6b5ed221cCFdC7Be197D111D915"
+              rel="noopener noreferrer"
+              target="_blank"
+              >0x021756…11D915</a
+            >
+          </div>
+        </div>
+        <!-- Volume Chart -->
+        <div class="neumorphic-raised rounded-2xl p-6 md:p-10 bg-background/50">
+          <div
+            class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4"
+          >
+            <div>
+              <h3 class="font-headline-md text-primary text-[23px] font-bold">
+                Uniswap Trading Volume
+              </h3>
+              <p class="text-on-surface-variant text-[19px] mt-1">
+                過去のDeFi市場アクティビティ
+              </p>
+              <p
+                class="font-label-sm text-on-surface-variant/70 text-[13px] mt-1"
+                id="volumeChartStatus"
+              >
+                DefiLlama APIから取得中…
+              </p>
+            </div>
+            <div
+              class="flex gap-2 bg-surface-container rounded-full p-1 neumorphic-sunken"
+            >
+              <button
+                class="range-btn font-label-sm py-1 px-4 rounded-full text-on-surface-variant hover:bg-surface-variant transition"
+                data-range="7"
+                type="button"
+              >
+                7D
+              </button>
+              <button
+                class="range-btn font-label-sm py-1 px-4 rounded-full bg-primary text-white shadow-md"
+                data-range="30"
+                type="button"
+              >
+                30D
+              </button>
+              <button
+                class="range-btn font-label-sm py-1 px-4 rounded-full text-on-surface-variant hover:bg-surface-variant transition"
+                data-range="365"
+                type="button"
+              >
+                1Y
+              </button>
+            </div>
+          </div>
+          <div
+            class="w-full h-[350px] neumorphic-sunken rounded-xl p-4 bg-white/40"
+          >
+            <canvas id="uniswapVolumeChart"></canvas>
+          </div>
+        </div>
+      </section>
+      <!-- Key Features Section -->
+      <section
+        class="flex flex-col items-center gap-stack-md"
+        id="key-features"
+      >
+        <div class="text-center w-full max-w-4xl">
+          <h2
+            class="font-headline-lg text-headline-md font-bold md:font-semibold text-primary mb-2 text-center w-full"
+          >
+            主な機能
+          </h2>
+          <div class="h-[2px] w-16 bg-primary mb-6 mx-auto"></div>
+          <p
+            class="text-on-surface-variant font-bold text-center mb-8 w-full text-lg"
+          >
+            効率的でスマートな流動性提供を実現するための4つのコア機能
+          </p>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full">
+            <!-- Feature 1: Automatic Re-ranging -->
+            <div
+              class="neumorphic-raised rounded-2xl p-8 flex flex-col gap-4 bg-white/50 relative overflow-hidden group"
+            >
+              <div
+                class="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-2"
+              >
+                <span class="material-symbols-outlined text-primary text-[34px]"
+                  >published_with_changes</span
+                >
+              </div>
+              <h3
+                class="font-headline-sm font-bold text-on-background text-left text-[20px]"
+              >
+                自動レンジ再設定
+              </h3>
+              <p
+                class="text-on-surface-variant text-[17px] text-left leading-relaxed"
+              >
+                設定済みの価格範囲を外れた場合、自動で範囲を設定しなおします。これにより機会損失を軽減し、収益機会を最大化します。
+              </p>
+              <div
+                class="mt-4 neumorphic-sunken rounded-xl p-4 bg-background/50 h-40 relative flex items-center justify-center"
+              >
+                <div
+                  class="w-full h-[2px] bg-outline-variant/30 absolute"
+                ></div>
+                <div
+                  class="w-2/3 h-16 border-2 border-primary/40 rounded-lg absolute flex items-center justify-center bg-primary/5 overflow-hidden"
+                >
+                  <svg
+                    class="w-full h-10 px-2"
+                    preserveAspectRatio="none"
+                    viewBox="0 0 100 20"
+                  >
+                    <path
+                      d="M0,10 Q12.5,3 25,10 T50,10 T75,10 T100,10"
+                      fill="none"
+                      stroke="#920883"
+                      stroke-width="1.5"
+                    ></path>
+                  </svg>
+                </div>
+                <div
+                  class="absolute top-3 right-4 text-sm font-bold text-primary flex items-center gap-1"
+                >
+                  <span class="material-symbols-outlined text-base"
+                    >sync</span
+                  >
+                  Auto
+                </div>
+              </div>
+            </div>
+            <!-- Feature 2: Auto-Compound & Auto-Collection -->
+            <div
+              class="neumorphic-raised rounded-2xl p-8 flex flex-col gap-4 bg-white/50 relative overflow-hidden group"
+            >
+              <div
+                class="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-2"
+              >
+                <span class="material-symbols-outlined text-primary text-[34px]"
+                  >currency_exchange</span
+                >
+              </div>
+              <h3
+                class="font-headline-sm font-bold text-on-background text-left text-[20px]"
+              >
+                自動複利運用・回収
+              </h3>
+              <p
+                class="text-on-surface-variant text-[17px] text-left leading-relaxed"
+              >
+                毎日指定時刻に、24時間分の手数料収益を自動で回収。元本に追加する複利運用か、ウォレットに回収する単利運用かを選べます。
+              </p>
+              <div
+                class="mt-4 neumorphic-sunken rounded-xl p-4 bg-background/50 h-40 relative flex items-center justify-center gap-4"
+              >
+                <div class="flex flex-col items-center gap-2">
+                  <div class="h-16 flex items-center">
+                    <div
+                      class="w-14 h-14 rounded-full bg-primary text-white flex items-center justify-center shadow-md"
+                    >
+                      <span class="material-symbols-outlined text-2xl"
+                        >savings</span
+                      >
+                    </div>
+                  </div>
+                  <span class="text-xs font-bold text-on-surface-variant"
+                    >Yield</span
+                  >
+                </div>
+                <div class="flex gap-1 items-center text-primary/50 mb-6">
+                  <span class="material-symbols-outlined text-3xl animate-pulse"
+                    >arrow_forward</span
+                  >
+                </div>
+                <div class="flex flex-col items-center gap-2">
+                  <div class="h-16 flex items-center">
+                    <div
+                      class="w-16 h-16 rounded-full border-2 border-primary text-primary flex items-center justify-center bg-white"
+                    >
+                      <span class="material-symbols-outlined text-3xl"
+                        >all_inclusive</span
+                      >
+                    </div>
+                  </div>
+                  <span class="text-xs font-bold text-primary">Compound</span>
+                </div>
+              </div>
+            </div>
+            <!-- Feature 3: Single Asset Provisioning -->
+            <div
+              class="neumorphic-raised rounded-2xl p-8 flex flex-col gap-4 bg-white/50 relative overflow-hidden group"
+            >
+              <div
+                class="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-2"
+              >
+                <span class="material-symbols-outlined text-primary text-[34px]"
+                  >account_balance_wallet</span
+                >
+              </div>
+              <h3
+                class="font-headline-sm font-bold text-on-background text-left text-[20px]"
+              >
+                単一資産からの自動ペア交換
+              </h3>
+              <p
+                class="text-on-surface-variant text-[17px] text-left leading-relaxed"
+              >
+                ETHなどの単一資産を用意するだけで、選択したペアに必要な割合で自動的に交換され、スムーズに流動性提供を開始できます。
+              </p>
+              <div
+                class="mt-4 neumorphic-sunken rounded-xl p-4 bg-background/50 h-40 relative flex items-center justify-center gap-6"
+              >
+                <div class="flex flex-col items-center gap-2">
+                  <div class="h-16 flex items-center">
+                    <img
+                      alt="Ethereum 公式ロゴ"
+                      class="w-16 h-16 rounded-full shadow-md bg-white object-cover"
+                      src="https://coin-images.coingecko.com/coins/images/279/large/ethereum.png?1696501628"
+                    />
+                  </div>
+                  <span
+                    class="text-xs font-bold text-on-surface-variant whitespace-nowrap"
+                    >100% ETH</span
+                  >
+                </div>
+                <span
+                  class="material-symbols-outlined text-primary text-3xl mb-6"
+                  >swap_horiz</span
+                >
+                <div class="flex flex-col items-center gap-2">
+                  <div class="h-16 flex items-center">
+                    <div class="flex -space-x-3">
+                      <img
+                        alt="USDC 公式ロゴ"
+                        class="w-12 h-12 rounded-full shadow-sm bg-white object-cover border-2 border-background z-20"
+                        src="https://coin-images.coingecko.com/coins/images/6319/large/USDC.png?1769615602"
+                      />
+                      <img
+                        alt="Hyperliquid 公式ロゴ"
+                        class="w-12 h-12 rounded-full shadow-sm bg-white object-cover border-2 border-background z-10"
+                        src="https://coin-images.coingecko.com/coins/images/50882/large/hyperliquid.jpg?1729431300"
+                      />
+                    </div>
+                  </div>
+                  <span
+                    class="text-xs font-bold text-on-surface-variant whitespace-nowrap"
+                    >Auto Split</span
+                  >
+                </div>
+              </div>
+            </div>
+            <!-- Feature 4: Real-time Performance Tracking -->
+            <div
+              class="neumorphic-raised rounded-2xl p-8 flex flex-col gap-4 bg-white/50 relative overflow-hidden group"
+            >
+              <div
+                class="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-2"
+              >
+                <span class="material-symbols-outlined text-primary text-[34px]"
+                  >monitoring</span
+                >
+              </div>
+              <h3
+                class="font-headline-sm font-bold text-on-background text-left text-[20px]"
+              >
+                リアルタイムパフォーマンス追跡
+              </h3>
+              <p
+                class="text-on-surface-variant text-[17px] text-left leading-relaxed"
+              >
+                流動性ポジションの現在評価額と手数料収益の推移を24時間ごとにグラフで確認でき、月間の収益合計も一目で把握可能です。
+              </p>
+              <div
+                class="mt-4 neumorphic-sunken rounded-xl p-4 bg-background/50 h-40 relative flex flex-col items-center justify-end overflow-hidden"
+              >
+                <div class="w-full flex justify-between px-2 mb-2">
+                  <div class="flex flex-col">
+                    <span class="text-[11px] text-on-surface-variant"
+                      >Total Value</span
+                    >
+                    <span class="text-base font-bold text-primary"
+                      >$3,748.39</span
+                    >
+                  </div>
+                  <div class="flex flex-col text-right">
+                    <span class="text-[11px] text-on-surface-variant"
+                      >Fees (24h)</span
+                    >
+                    <span class="text-base font-bold text-green-500"
+                      >+$12.45</span
+                    >
+                  </div>
+                </div>
+                <svg
+                  class="w-full h-16"
+                  preserveAspectRatio="none"
+                  viewBox="0 0 100 30"
+                >
+                  <path
+                    d="M0,30 L0,20 Q10,15 20,22 T40,10 T60,18 T80,5 T100,8 L100,30 Z"
+                    fill="#920883"
+                    opacity="0.1"
+                  ></path>
+                  <path
+                    d="M0,20 Q10,15 20,22 T40,10 T60,18 T80,5 T100,8"
+                    fill="none"
+                    stroke="#920883"
+                    stroke-width="1.5"
+                  ></path>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- Supported Chains Integration -->
+      <section class="flex flex-col items-center gap-stack-md" id="chains">
+        <div class="text-center w-full max-w-4xl">
+          <h2
+            class="font-headline-lg text-headline-md font-bold md:font-semibold text-primary mb-2 text-center w-full"
+          >
+            対応チェーン
+          </h2>
+          <div class="h-[2px] w-16 bg-primary mb-6 mx-auto"></div>
+          <p
+            class="text-on-surface-variant font-bold text-center mb-8 w-full text-lg"
+          >
+            マルチチェーン対応で、より多くの資産にスマートにアクセス
+          </p>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-6 w-full">
+            <a
+              class="glassmorphism rounded-xl p-6 flex flex-col gap-3 text-left hover:-translate-y-1 transition-transform focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+              href="https://ethereum.org/ja/"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              <div class="flex items-start justify-between">
+                <img
+                  alt="Ethereum チェーンアイコン"
+                  class="w-10 h-10 rounded-full shadow-sm mb-1 bg-white object-cover"
+                  src="https://coin-images.coingecko.com/coins/images/279/large/ethereum.png?1696501628"
+                />
+                <span
+                  class="material-symbols-outlined text-[18px] text-on-surface-variant opacity-50"
+                  >open_in_new</span
+                >
+              </div>
+              <h3 class="font-headline-sm font-bold text-on-background text-[19px]">
+                Ethereum
+              </h3>
+              <p class="text-on-surface-variant text-sm leading-relaxed">
+                スマートコントラクトプラットフォームの代表格
+              </p>
+            </a>
+            <a
+              class="glassmorphism rounded-xl p-6 flex flex-col gap-3 text-left hover:-translate-y-1 transition-transform focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+              href="https://optimism.io/"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              <div class="flex items-start justify-between">
+                <img
+                  alt="Optimism チェーンアイコン"
+                  class="w-10 h-10 rounded-full shadow-sm mb-1 bg-white object-cover"
+                  src="https://icons.llamao.fi/icons/chains/rsz_optimism.jpg"
+                />
+                <span
+                  class="material-symbols-outlined text-[18px] text-on-surface-variant opacity-50"
+                  >open_in_new</span
+                >
+              </div>
+              <h3 class="font-headline-sm font-bold text-on-background text-[19px]">
+                Optimism
+              </h3>
+              <p class="text-on-surface-variant text-sm leading-relaxed">
+                Ethereumのスケーラビリティを向上させるL2
+              </p>
+            </a>
+            <a
+              class="glassmorphism rounded-xl p-6 flex flex-col gap-3 text-left hover:-translate-y-1 transition-transform focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+              href="https://www.base.org/"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              <div class="flex items-start justify-between">
+                <img
+                  alt="Base チェーンアイコン"
+                  class="w-10 h-10 rounded-full shadow-sm mb-1 bg-white object-cover"
+                  src="https://icons.llamao.fi/icons/chains/rsz_base.jpg"
+                />
+                <span
+                  class="material-symbols-outlined text-[18px] text-on-surface-variant opacity-50"
+                  >open_in_new</span
+                >
+              </div>
+              <h3 class="font-headline-sm font-bold text-on-background text-[19px]">
+                Base
+              </h3>
+              <p class="text-on-surface-variant text-sm leading-relaxed">
+                Coinbaseが開発したスケーラビリティを向上させるL2
+              </p>
+            </a>
+            <a
+              class="glassmorphism rounded-xl p-6 flex flex-col gap-3 text-left hover:-translate-y-1 transition-transform focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+              href="https://arbitrum.io/"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              <div class="flex items-start justify-between">
+                <img
+                  alt="Arbitrum チェーンアイコン"
+                  class="w-10 h-10 rounded-full shadow-sm mb-1 bg-white object-cover"
+                  src="https://icons.llamao.fi/icons/chains/rsz_arbitrum.jpg"
+                />
+                <span
+                  class="material-symbols-outlined text-[18px] text-on-surface-variant opacity-50"
+                  >open_in_new</span
+                >
+              </div>
+              <h3 class="font-headline-sm font-bold text-on-background text-[19px]">
+                Arbitrum
+              </h3>
+              <p class="text-on-surface-variant text-sm leading-relaxed">
+                高いスケーラビリティと低コストを実現するEthereum L2
+              </p>
+            </a>
+            <a
+              class="glassmorphism rounded-xl p-6 flex flex-col gap-3 text-left hover:-translate-y-1 transition-transform focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+              href="https://www.bnbchain.org/en"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              <div class="flex items-start justify-between">
+                <img
+                  alt="BNB Smart Chain チェーンアイコン"
+                  class="w-10 h-10 rounded-full shadow-sm mb-1 bg-white object-cover"
+                  src="https://coin-images.coingecko.com/coins/images/825/large/bnb-icon2_2x.png?1696501970"
+                />
+                <span
+                  class="material-symbols-outlined text-[18px] text-on-surface-variant opacity-50"
+                  >open_in_new</span
+                >
+              </div>
+              <h3 class="font-headline-sm font-bold text-on-background text-[19px]">
+                BNB Smart Chain
+              </h3>
+              <p class="text-on-surface-variant text-sm leading-relaxed">
+                高速・低コストで多くのDappsを支えるチェーン
+              </p>
+            </a>
+            <a
+              class="glassmorphism rounded-xl p-6 flex flex-col gap-3 text-left hover:-translate-y-1 transition-transform focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+              href="https://solana.com/ja"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              <div class="flex items-start justify-between">
+                <img
+                  alt="Solana チェーンアイコン"
+                  class="w-10 h-10 rounded-full shadow-sm mb-1 bg-white object-cover"
+                  src="https://coin-images.coingecko.com/coins/images/4128/large/solana.png?1718769756"
+                />
+                <span
+                  class="material-symbols-outlined text-[18px] text-on-surface-variant opacity-50"
+                  >open_in_new</span
+                >
+              </div>
+              <h3 class="font-headline-sm font-bold text-on-background text-[19px]">
+                Solana
+              </h3>
+              <p class="text-on-surface-variant text-sm leading-relaxed">
+                高速処理と低手数料を特徴とする次世代ブロックチェーン
+              </p>
+            </a>
+            <a
+              class="glassmorphism rounded-xl p-6 flex flex-col gap-3 text-left hover:-translate-y-1 transition-transform focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+              href="https://www.unichain.org/"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              <div class="flex items-start justify-between">
+                <img
+                  alt="Unichain チェーンアイコン"
+                  class="w-10 h-10 rounded-full shadow-sm mb-1 bg-white object-cover"
+                  src="https://icons.llamao.fi/icons/chains/rsz_unichain.jpg"
+                />
+                <span
+                  class="material-symbols-outlined text-[18px] text-on-surface-variant opacity-50"
+                  >open_in_new</span
+                >
+              </div>
+              <h3 class="font-headline-sm font-bold text-on-background text-[19px]">
+                Unichain
+              </h3>
+              <p class="text-on-surface-variant text-sm leading-relaxed">
+                Uniswapが開発するEthereum L2ネットワーク
+              </p>
+            </a>
+            <a
+              class="glassmorphism rounded-xl p-6 flex flex-col gap-3 text-left hover:-translate-y-1 transition-transform focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+              href="https://robinhood.com/us/en/crypto/chain/"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              <div class="flex items-start justify-between">
+                <img
+                  alt="Robinhood Chain チェーンアイコン"
+                  class="w-10 h-10 rounded-full shadow-sm mb-1 bg-white object-cover"
+                  src="https://icons.llamao.fi/icons/chains/rsz_robinhood.jpg"
+                />
+                <span
+                  class="material-symbols-outlined text-[18px] text-on-surface-variant opacity-50"
+                  >open_in_new</span
+                >
+              </div>
+              <h3 class="font-headline-sm font-bold text-on-background text-[19px]">
+                Robinhood Chain
+              </h3>
+              <p class="text-on-surface-variant text-sm leading-relaxed">
+                金融サービスと現実資産（RWA: Real World
+                Assets）を扱うために構築されたL2
+              </p>
+            </a>
+          </div>
+        </div>
+      </section>
+      <!-- Fee Structure -->
+      <section class="flex flex-col items-center gap-stack-md">
+        <div class="w-full max-w-4xl text-left">
+          <h2
+            class="font-headline-lg text-headline-md font-bold md:font-semibold text-primary mb-2 text-center"
+          >
+            利用料金について
+          </h2>
+          <div class="h-[2px] w-16 bg-primary mb-8 mx-auto"></div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
+            <div
+              class="neumorphic-raised rounded-2xl p-8 bg-surface-container-low/50 flex flex-col gap-6 h-full border border-white/50"
+            >
+              <div>
+                <h3
+                  class="font-headline-sm font-bold text-on-background text-[21px] flex items-center gap-3 border-b border-outline-variant/30 pb-4 mb-4"
+                >
+                  <span class="material-symbols-outlined text-primary text-[36px]"
+                    >savings</span
+                  >
+                  手数料収益について
+                </h3>
+                <p class="text-on-surface-variant text-lg">
+                  流動性提供を行っているペアごとの手数料収益の50%がシステム手数料として引かれます。
+                </p>
+              </div>
+              <div
+                class="mt-auto bg-white/40 p-5 rounded-xl neumorphic-sunken flex flex-col gap-3"
+              >
+                <div class="flex items-center justify-between gap-4">
+                  <span class="text-[15px] text-on-surface-variant"
+                    >24時間ごとの手数料</span
+                  >
+                  <span
+                    class="font-headline-md text-[26px] font-bold text-on-background leading-none"
+                    >100%</span
+                  >
+                </div>
+                <div class="flex items-center justify-between gap-4">
+                  <span class="text-[15px] text-on-surface-variant"
+                    >システム手数料</span
+                  >
+                  <span
+                    class="font-headline-md text-[26px] font-bold text-on-surface-variant leading-none"
+                    >−50%</span
+                  >
+                </div>
+                <div class="h-px bg-outline-variant/50"></div>
+                <div
+                  class="flex items-center justify-between gap-4 bg-primary text-white rounded-xl px-4 py-3 shadow-md"
+                >
+                  <span class="text-[15px] font-bold">お客様手数料収益</span>
+                  <span
+                    class="font-headline-md text-[30px] font-bold leading-none"
+                    >50%</span
+                  >
+                </div>
+              </div>
+            </div>
+            <div class="flex flex-col gap-6">
+              <div
+                class="neumorphic-raised rounded-2xl p-8 bg-surface-container-low/50 flex flex-col justify-center h-full border border-white/50"
+              >
+                <h3
+                  class="font-headline-sm font-bold text-on-background text-[21px] flex items-center gap-3 mb-4"
+                >
+                  <span class="material-symbols-outlined text-primary text-[36px]"
+                    >account_balance_wallet</span
+                  >
+                  初期費用
+                </h3>
+                <p class="text-sm text-on-surface-variant mb-1">初回登録時</p>
+                <div class="flex items-end gap-2 mb-2">
+                  <p class="text-5xl font-bold text-primary">¥9,800</p>
+                  <p class="text-sm text-on-surface-variant pb-1">（税込）</p>
+                </div>
+                <p class="text-sm text-on-surface-variant">
+                  システム登録料、サポート料として
+                </p>
+              </div>
+              <div
+                class="neumorphic-raised rounded-2xl p-8 bg-surface-container-low/50 flex flex-col justify-center h-full border border-white/50"
+              >
+                <h3
+                  class="font-headline-sm font-bold text-on-background text-[21px] flex items-center gap-3 mb-4"
+                >
+                  <span class="material-symbols-outlined text-primary text-[36px]"
+                    >diamond</span
+                  >
+                  最低運用額面
+                </h3>
+                <div class="flex items-end gap-2">
+                  <p class="text-5xl font-bold text-primary">
+                    1 ETH<span class="text-3xl">~</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- Trust Center (Security & Risks) -->
+      <section class="flex flex-col gap-stack-md" id="trust">
+        <div class="w-full max-w-5xl mx-auto">
+          <div class="mb-12">
+            <h2
+              class="font-headline-lg text-headline-md font-bold md:font-semibold text-primary mb-2 text-center w-full"
+            >
+              運用について
+            </h2>
+            <div class="h-[2px] w-16 bg-primary mb-6 mx-auto"></div>
+            <h3
+              class="text-on-surface-variant font-bold text-center mb-8 w-full text-xl"
+            >
+              LIQUIDはUNISWAP上の流動性提供の最適化ツール
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div
+                class="neumorphic-raised rounded-2xl p-8 bg-white/50 flex flex-col justify-center border border-white/50 min-h-[200px]"
+              >
+                <span
+                  class="material-symbols-outlined text-primary text-5xl mb-4"
+                  >account_balance_wallet</span
+                >
+                <p class="text-xl font-bold text-on-background leading-relaxed">
+                  暗号資産の管理は<br />
+                  <span class="border-b-2 border-red-400"
+                    >お客様のウォレットにて、ご自身で管理</span
+                  >
+                </p>
+                <p class="text-sm text-on-surface-variant mt-6">
+                  ※当社で資産をお預かりすることはありません。
+                </p>
+              </div>
+              <div class="flex flex-col gap-6">
+                <div
+                  class="neumorphic-raised rounded-xl p-6 bg-white/50 flex items-start gap-4 border border-white/50"
+                >
+                  <span
+                    class="material-symbols-outlined text-primary text-[34px] mt-1"
+                    >key</span
+                  >
+                  <p
+                    class="text-on-background font-bold leading-relaxed text-lg"
+                  >
+                    ウォレットのプライベートキー・<span
+                      class="border-b border-red-400"
+                      >秘密鍵などを<br />当社でお預かりすることはありません。</span
+                    >
+                  </p>
+                </div>
+                <div
+                  class="neumorphic-raised rounded-xl p-6 bg-white/50 flex items-start gap-4 border border-white/50"
+                >
+                  <span
+                    class="material-symbols-outlined text-primary text-[34px] mt-1"
+                    >shield</span
+                  >
+                  <div>
+                    <p
+                      class="text-on-background font-bold leading-relaxed text-lg mb-2"
+                    >
+                      資産を動かす際はウォレットの認証が必要
+                    </p>
+                    <p class="text-sm text-on-surface-variant leading-relaxed">
+                      ※流動性提供中の資産は、ウォレットで承認したスマートコントラクトを通じてUniswap上で運用されます。自動処理の範囲や承認内容は、利用開始前に必ずご確認ください。
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="mb-8">
+            <h2
+              class="font-headline-lg text-headline-md font-bold md:font-semibold text-primary mb-2 text-center w-full"
+            >
+              主なリスク
+            </h2>
+            <div class="h-[2px] w-16 bg-primary mb-6 mx-auto"></div>
+            <p
+              class="text-on-surface-variant font-bold text-center mb-8 w-full text-lg"
+            >
+              流動性提供には様々なリスクがあります。
+            </p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div
+                class="neumorphic-raised rounded-xl p-6 bg-white/50 flex flex-col gap-3 border border-white/50 hover:shadow-lg transition-shadow"
+              >
+                <span class="text-primary font-bold text-lg">01</span>
+                <h4 class="font-bold text-on-background text-[18px]">暗号資産の価格下落</h4>
+                <p class="text-sm text-on-surface-variant leading-relaxed">
+                  預けた資産そのものの価格が下がれば、評価額も減少します。
+                </p>
+              </div>
+              <div
+                class="neumorphic-raised rounded-xl p-6 bg-white/50 flex flex-col gap-3 border border-white/50 hover:shadow-lg transition-shadow"
+              >
+                <span class="text-primary font-bold text-lg">02</span>
+                <h4 class="font-bold text-on-background text-[18px]">
+                  インパーマネントロス
+                </h4>
+                <p class="text-sm text-on-surface-variant leading-relaxed">
+                  価格変動により、単純保有より評価額が小さくなることがあります。
+                </p>
+              </div>
+              <div
+                class="neumorphic-raised rounded-xl p-6 bg-white/50 flex flex-col gap-3 border border-white/50 hover:shadow-lg transition-shadow"
+              >
+                <span class="text-primary font-bold text-lg">03</span>
+                <h4 class="font-bold text-on-background text-[18px]">
+                  レンジ外で手数料を獲得できない期間
+                </h4>
+                <p class="text-sm text-on-surface-variant leading-relaxed">
+                  価格が設定範囲を外れている間は手数料収益が発生しません。
+                </p>
+              </div>
+              <div
+                class="neumorphic-raised rounded-xl p-6 bg-white/50 flex flex-col gap-3 border border-white/50 hover:shadow-lg transition-shadow"
+              >
+                <span class="text-primary font-bold text-lg">04</span>
+                <h4 class="font-bold text-on-background text-[18px]">
+                  スマートコントラクトのバグ・脆弱性
+                </h4>
+                <p class="text-sm text-on-surface-variant leading-relaxed">
+                  プログラムの不具合や攻撃により資産を失う可能性があります。
+                </p>
+              </div>
+              <div
+                class="neumorphic-raised rounded-xl p-6 bg-white/50 flex flex-col gap-3 border border-white/50 hover:shadow-lg transition-shadow"
+              >
+                <span class="text-primary font-bold text-lg">05</span>
+                <h4 class="font-bold text-on-background text-[18px]">
+                  ステーブルコインの価格乖離
+                </h4>
+                <p class="text-sm text-on-surface-variant leading-relaxed">
+                  米ドルなどとの連動が崩れると、ペア全体の評価額が下がります。
+                </p>
+              </div>
+              <div
+                class="neumorphic-raised rounded-xl p-6 bg-white/50 flex flex-col gap-3 border border-white/50 hover:shadow-lg transition-shadow"
+              >
+                <span class="text-primary font-bold text-lg">06</span>
+                <h4 class="font-bold text-on-background text-[18px]">
+                  ガス代、スワップコスト、スリッページ
+                </h4>
+                <p class="text-sm text-on-surface-variant leading-relaxed">
+                  取引ごとの費用や約定価格のずれが収益を目減りさせます。
+                </p>
+              </div>
+              <div
+                class="neumorphic-raised rounded-xl p-6 bg-white/50 flex flex-col gap-3 border border-white/50 hover:shadow-lg transition-shadow"
+              >
+                <span class="text-primary font-bold text-lg">07</span>
+                <h4 class="font-bold text-on-background text-[18px]">
+                  自動再設定による資産構成の変化
+                </h4>
+                <p class="text-sm text-on-surface-variant leading-relaxed">
+                  範囲の引き直しに伴い、保有する2資産の枚数が変わります。
+                </p>
+              </div>
+              <div
+                class="neumorphic-raised rounded-xl p-6 bg-white/50 flex flex-col gap-3 border border-white/50 hover:shadow-lg transition-shadow"
+              >
+                <span class="text-primary font-bold text-lg">08</span>
+                <h4 class="font-bold text-on-background text-[18px]">
+                  チェーン障害・システム停止・取引失敗
+                </h4>
+                <p class="text-sm text-on-surface-variant leading-relaxed">
+                  ネットワークやシステムの停止時は、自動処理が行われません。
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- CTA Section -->
+      <section
+        class="glassmorphism rounded-3xl p-12 flex flex-col items-center justify-center text-center gap-stack-md relative overflow-hidden border-2 border-primary/20"
+      >
+        <div
+          class="absolute -top-24 -left-24 w-64 h-64 bg-primary rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"
+        ></div>
+        <div
+          class="absolute -bottom-24 -right-24 w-64 h-64 bg-inverse-primary rounded-full mix-blend-multiply filter blur-3xl opacity-40 animate-blob animation-delay-2000"
+        ></div>
+        <h2
+          class="font-headline-lg text-primary text-[32px] md:text-[40px] font-bold leading-tight relative z-10"
+        >
+          新しい運用体験を始めましょう
+        </h2>
+        <a
+          class="mt-6 bg-primary text-white font-headline-sm py-5 px-12 rounded-full shadow-[0_10px_30px_rgba(146,8,131,0.4)] hover:shadow-[0_15px_40px_rgba(146,8,131,0.6)] transform hover:-translate-y-1 transition-all duration-300 relative z-10 inline-flex items-center justify-center gap-3"
+          href="https://forms.gle/xeVMcscVTMFS7q1t8"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          <span class="material-symbols-outlined">account_balance_wallet</span>
+          LIQUIDに登録する
+        </a>
+      </section>
+    </main>
+    <!-- Footer -->
+    <footer
+      class="w-full py-stack-lg px-margin-desktop flex flex-col md:flex-row justify-between items-center max-w-container-max-width mx-auto bg-background border-t border-outline-variant/30"
+    >
+      <div class="flex items-center gap-4 mb-6 md:mb-0">
+        <img
+          alt="Liquid Logo"
+          class="h-8 w-auto grayscale opacity-70"
+          src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZafytXPSeLow3e7PuYTerYndoU06X7mHUo636EZc-pGfKia6wrgEPQO5A4Yw1e9pZGsuPIKP6uRe1Jr5MwhqXCNS3hveU2UNe1Fmkfrx1U4HjfnT9ViML6hRF_mJ0nEklMbxUD-jn-lAq3v_LdSIXJa46KPCsCWZQAHW11jf7hwQ1iVZ7peiys6o5ebQCSgeMtQCWt7q8ACE0xtEjt5f0ffZ3AOqf9R_3fbkFlglFnwl74oI-y6ujL1fyRaAeRHoElDk"
+        />
+        <div class="font-label-sm text-on-surface-variant">
+          © 2026 Liquid. Optimizing DeFi for beginners.
+        </div>
+      </div>
+      <nav class="flex flex-wrap gap-x-8 gap-y-4 justify-center">
+        <a
+          class="font-label-sm text-on-surface-variant hover:text-primary transition-colors"
+          href="https://liquid2026.com/term-of-service.pdf?v=4"
+          rel="noopener noreferrer"
+          target="_blank"
+          >利用規約</a
+        >
+        <a
+          class="font-label-sm text-on-surface-variant hover:text-primary transition-colors"
+          href="https://liquid2026.com/privacy-policy.pdf?v=4"
+          rel="noopener noreferrer"
+          target="_blank"
+          >プライバシーポリシー</a
+        >
+        <a
+          class="font-label-sm text-on-surface-variant hover:text-primary transition-colors"
+          href="contact.html"
+          >お問い合わせ</a
+        >
+      </nav>
+    </footer>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // =====================================================
+        // モバイル用ハンバーガーメニュー
+        // =====================================================
+        const menuToggle = document.getElementById("menuToggle");
+        const mobileMenu = document.getElementById("mobileMenu");
+        const menuIcon = document.getElementById("menuIcon");
+
+        if (menuToggle && mobileMenu && menuIcon) {
+          const setMenu = function (open) {
+            mobileMenu.classList.toggle("hidden", !open);
+            menuToggle.setAttribute("aria-expanded", open ? "true" : "false");
+            menuToggle.setAttribute(
+              "aria-label",
+              open ? "メニューを閉じる" : "メニューを開く",
+            );
+            menuIcon.textContent = open ? "close" : "menu";
+          };
+
+          menuToggle.addEventListener("click", function (e) {
+            e.stopPropagation();
+            setMenu(mobileMenu.classList.contains("hidden"));
+          });
+
+          // 項目を選んだら閉じる
+          mobileMenu.querySelectorAll("a").forEach(function (link) {
+            link.addEventListener("click", function () {
+              setMenu(false);
+            });
+          });
+
+          // メニュー外をタップしたら閉じる
+          document.addEventListener("click", function (e) {
+            if (
+              !mobileMenu.contains(e.target) &&
+              !menuToggle.contains(e.target)
+            ) {
+              setMenu(false);
+            }
+          });
+
+          // Escape キーで閉じる
+          document.addEventListener("keydown", function (e) {
+            if (e.key === "Escape") setMenu(false);
+          });
+        }
+
+        // 金額を "$1.47B" / "$820M" 形式に整形
+        function compactUsd(v) {
+          if (v >= 1e9) return "$" + (v / 1e9).toFixed(2) + "B";
+          if (v >= 1e6) return "$" + (v / 1e6).toFixed(0) + "M";
+          if (v >= 1e3) return "$" + (v / 1e3).toFixed(0) + "K";
+          return "$" + Math.round(v);
+        }
+
+        // =====================================================
+        // Market Scale カード: CoinGecko からリアルタイム価格を取得
+        // =====================================================
+        const COINGECKO_MARKETS =
+          "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=" +
+          "bitcoin,ethereum,hyperliquid,united-states-oil-fund-ondo-tokenized";
+
+        function formatPrice(n) {
+          const digits = n < 1 ? 6 : n < 100 ? 2 : 2;
+          return (
+            "$" +
+            n.toLocaleString("en-US", {
+              minimumFractionDigits: digits,
+              maximumFractionDigits: digits,
+            })
+          );
+        }
+
+        fetch(COINGECKO_MARKETS)
+          .then(function (r) {
+            if (!r.ok) throw new Error("CoinGecko " + r.status);
+            return r.json();
+          })
+          .then(function (coins) {
+            coins.forEach(function (coin) {
+              const card = document.querySelector(
+                '[data-coin="' + coin.id + '"]',
+              );
+              if (!card) return;
+
+              // 公式ロゴ（CoinGecko 配信の各プロジェクト公式アセット）
+              const logoEl = card.querySelector("img");
+              if (logoEl && coin.image) logoEl.src = coin.image;
+
+              const priceEl = card.querySelector('[data-role="price"]');
+              if (priceEl && typeof coin.current_price === "number") {
+                priceEl.textContent = formatPrice(coin.current_price);
+              }
+
+              const changeEl = card.querySelector('[data-role="change"]');
+              const pct = coin.price_change_percentage_24h;
+              if (changeEl && typeof pct === "number") {
+                const up = pct >= 0;
+                changeEl.className =
+                  "inline-flex items-center gap-1 rounded-full px-3 py-1 text-[17px] font-bold " +
+                  (up
+                    ? "bg-green-500/10 text-green-700"
+                    : "bg-red-500/10 text-red-600");
+                changeEl.innerHTML =
+                  '<span class="material-symbols-outlined text-[18px] leading-none">' +
+                  (up ? "trending_up" : "trending_down") +
+                  "</span>" +
+                  (up ? "+" : "") +
+                  pct.toFixed(2) +
+                  "%";
+              }
+            });
+          })
+          .catch(function () {
+            // 取得失敗時は HTML に埋め込んだ静的値をそのまま表示
+          });
+
+        // =====================================================
+        // 流動性提供ペアの24時間APR: GeckoTerminal から実データを取得
+        //   APR = 24h出来高 × 手数料率 ÷ TVL × 365
+        //   （プール全体の手数料をプール全体のTVLで割った平均値）
+        // =====================================================
+        const poolCards = Array.from(document.querySelectorAll("[data-pool]"));
+        const aprStatusEl = document.getElementById("poolAprStatus");
+
+        if (poolCards.length && aprStatusEl) {
+          // ネットワークごとにまとめて取得し、リクエスト数を抑える
+          const byNetwork = {};
+          poolCards.forEach(function (card) {
+            const net = card.dataset.network;
+            if (!byNetwork[net]) byNetwork[net] = [];
+            byNetwork[net].push(card);
+          });
+
+          const requests = Object.keys(byNetwork).map(function (net) {
+            const cards = byNetwork[net];
+            const addrs = cards.map(function (c) {
+              return c.dataset.address;
+            });
+            const url =
+              "https://api.geckoterminal.com/api/v2/networks/" +
+              net +
+              "/pools/" +
+              (addrs.length > 1 ? "multi/" + addrs.join(",") : addrs[0]);
+
+            return fetch(url)
+              .then(function (r) {
+                if (!r.ok) throw new Error(net + " " + r.status);
+                return r.json();
+              })
+              .then(function (json) {
+                const list = Array.isArray(json.data) ? json.data : [json.data];
+                list.forEach(function (d) {
+                  const attrs = d && d.attributes;
+                  if (!attrs) return;
+
+                  // レスポンスのアドレスは小文字なので揃えて突き合わせる
+                  const card = cards.filter(function (c) {
+                    return (
+                      c.dataset.address.toLowerCase() ===
+                      String(attrs.address).toLowerCase()
+                    );
+                  })[0];
+                  if (!card) return;
+
+                  const tvl = parseFloat(attrs.reserve_in_usd);
+                  const vol = parseFloat(
+                    attrs.volume_usd ? attrs.volume_usd.h24 : NaN,
+                  );
+                  const feeRate =
+                    attrs.pool_fee_percentage != null
+                      ? parseFloat(attrs.pool_fee_percentage) / 100
+                      : parseFloat(card.dataset.fee);
+
+                  if (isFinite(tvl) && tvl > 0 && isFinite(vol)) {
+                    const apr = ((vol * feeRate) / tvl) * 365 * 100;
+                    card.querySelector('[data-role="apr"]').textContent =
+                      apr.toFixed(2) + "%";
+                  }
+                  if (isFinite(tvl)) {
+                    card.querySelector('[data-role="tvl"]').textContent =
+                      compactUsd(tvl);
+                  }
+                  if (isFinite(vol)) {
+                    card.querySelector('[data-role="vol"]').textContent =
+                      compactUsd(vol);
+                  }
+                });
+              });
+          });
+
+          Promise.all(requests)
+            .then(function () {
+              aprStatusEl.textContent =
+                "出典: GeckoTerminal — 24時間の出来高とTVLから算出した実績値（将来の収益を保証するものではありません）";
+            })
+            .catch(function (err) {
+              aprStatusEl.textContent =
+                "APRデータを取得できませんでした（" + err.message + "）";
+            });
+        }
+
+        // =====================================================
+        // Uniswap Trading Volume: DefiLlama から実データを取得
+        // =====================================================
+        const DEFILLAMA_UNISWAP =
+          "https://api.llama.fi/summary/dexs/uniswap" +
+          "?excludeTotalDataChartBreakdown=true&dataType=dailyVolume";
+
+        const canvas = document.getElementById("uniswapVolumeChart");
+        const statusEl = document.getElementById("volumeChartStatus");
+        const ctx = canvas.getContext("2d");
+        const gradient = ctx.createLinearGradient(0, 0, 0, 350);
+        gradient.addColorStop(0, "rgba(146, 8, 131, 0.6)");
+        gradient.addColorStop(1, "rgba(146, 8, 131, 0.01)");
+
+        // 現在描画中の各点の日付。ツールチップで正確な日付を出すために保持する
+        let currentDates = [];
+
+        const chart = new Chart(ctx, {
+          type: "line",
+          data: {
+            labels: [],
+            datasets: [
+              {
+                label: "Uniswap Daily Volume (USD)",
+                data: [],
+                borderColor: "#920883",
+                backgroundColor: gradient,
+                borderWidth: 3,
+                pointBackgroundColor: "#fff",
+                pointBorderColor: "#920883",
+                pointBorderWidth: 2,
+                pointRadius: 3,
+                pointHoverRadius: 7,
+                fill: true,
+                tension: 0.4,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                backgroundColor: "rgba(255, 255, 255, 0.9)",
+                titleColor: "#23191f",
+                bodyColor: "#6c0061",
+                titleFont: {
+                  family: "Hanken Grotesk",
+                  size: 13,
+                  weight: "bold",
+                },
+                bodyFont: {
+                  family: "Hanken Grotesk",
+                  size: 15,
+                  weight: "bold",
+                },
+                padding: 12,
+                borderColor: "rgba(146, 8, 131, 0.2)",
+                borderWidth: 1,
+                cornerRadius: 12,
+                displayColors: false,
+                callbacks: {
+                  // 軸ラベルが年月表記でも、ツールチップは常に日付まで表示する
+                  title: function (items) {
+                    const d = currentDates[items[0].dataIndex];
+                    return d
+                      ? d.toLocaleDateString("ja-JP", {
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        })
+                      : items[0].label;
+                  },
+                  label: function (context) {
+                    return compactUsd(context.parsed.y);
+                  },
+                },
+              },
+            },
+            scales: {
+              x: {
+                grid: { display: false },
+                ticks: {
+                  font: { family: "Hanken Grotesk", size: 11 },
+                  color: "#86717e",
+                  maxRotation: 0,
+                  autoSkip: true,
+                  maxTicksLimit: 8,
+                },
+              },
+              y: {
+                grid: {
+                  color: "rgba(216, 192, 206, 0.4)",
+                  borderDash: [5, 5],
+                },
+                border: { display: false },
+                ticks: {
+                  font: { family: "Hanken Grotesk", size: 11 },
+                  color: "#86717e",
+                  callback: function (value) {
+                    return compactUsd(value);
+                  },
+                },
+              },
+            },
+            interaction: {
+              intersect: false,
+              mode: "index",
+            },
+          },
+        });
+
+        // [{ t: Date, v: number }] の全期間データ
+        let volumeSeries = [];
+
+        function renderRange(days) {
+          if (!volumeSeries.length) return;
+          const slice = volumeSeries.slice(-days);
+          currentDates = slice.map(function (p) {
+            return p.t;
+          });
+          // 半年以上のレンジは年月表記にして、年をまたいでも読み取れるようにする
+          const longRange = days >= 180;
+          chart.data.labels = slice.map(function (p) {
+            return longRange
+              ? p.t.getFullYear() + "/" + (p.t.getMonth() + 1)
+              : p.t.toLocaleDateString("ja-JP", {
+                  month: "numeric",
+                  day: "numeric",
+                });
+          });
+          chart.data.datasets[0].data = slice.map(function (p) {
+            return p.v;
+          });
+          // 点が多いレンジではマーカーを消して線を読みやすくする
+          chart.data.datasets[0].pointRadius = slice.length > 45 ? 0 : 3;
+          chart.update();
+        }
+
+        document.querySelectorAll(".range-btn").forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            document.querySelectorAll(".range-btn").forEach(function (b) {
+              b.className =
+                "range-btn font-label-sm py-1 px-4 rounded-full text-on-surface-variant hover:bg-surface-variant transition";
+            });
+            btn.className =
+              "range-btn font-label-sm py-1 px-4 rounded-full bg-primary text-white shadow-md";
+            renderRange(Number(btn.dataset.range));
+          });
+        });
+
+        fetch(DEFILLAMA_UNISWAP)
+          .then(function (r) {
+            if (!r.ok) throw new Error("DefiLlama " + r.status);
+            return r.json();
+          })
+          .then(function (json) {
+            volumeSeries = (json.totalDataChart || [])
+              .filter(function (p) {
+                return Array.isArray(p) && typeof p[1] === "number";
+              })
+              .map(function (p) {
+                return { t: new Date(p[0] * 1000), v: p[1] };
+              });
+
+            if (!volumeSeries.length) throw new Error("no data points");
+
+            renderRange(30);
+
+            const latest = volumeSeries[volumeSeries.length - 1];
+            statusEl.textContent =
+              "出典: DefiLlama（全チェーン合計・日次） / 24h " +
+              compactUsd(
+                typeof json.total24h === "number" ? json.total24h : latest.v,
+              ) +
+              " ・ 最終更新 " +
+              latest.t.toLocaleDateString("ja-JP");
+          })
+          .catch(function (err) {
+            statusEl.textContent =
+              "取引高データを取得できませんでした（" + err.message + "）";
+          });
+      });
+    </script>
+  </body>
+</html>
