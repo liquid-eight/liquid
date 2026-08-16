@@ -5,6 +5,11 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>お問い合わせ - Liquid</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script
+      src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+      async
+      defer
+    ></script>
     <link
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
       rel="stylesheet"
@@ -369,6 +374,18 @@
             ></textarea>
           </div>
 
+          <!-- ハニーポット: 人間には見えず、bot だけが入力する罠フィールド -->
+          <div aria-hidden="true" class="hidden">
+            <label for="company">会社名（入力しないでください）</label>
+            <input
+              autocomplete="off"
+              id="company"
+              name="company"
+              tabindex="-1"
+              type="text"
+            />
+          </div>
+
           <label class="flex items-start gap-3 cursor-pointer">
             <input
               class="mt-1 w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary/30 shrink-0"
@@ -387,6 +404,20 @@
             </span>
           </label>
 
+          <!--
+            Turnstile（スパム対策）ウィジェット
+            ★ data-sitekey は Cloudflare ダッシュボード > Turnstile で
+              liquid.crypto-eight.com 用に発行したサイトキーに差し替えてください。
+              現在の値は「常に成功するテスト用キー」です。
+          -->
+          <div
+            class="cf-turnstile self-start"
+            data-language="ja"
+            data-sitekey="0x4AAAAAAERV1jX8DkyLVTNS"
+            data-theme="light"
+            id="turnstileWidget"
+          ></div>
+
           <div
             aria-live="polite"
             class="hidden rounded-xl px-4 py-3 text-[15px] leading-relaxed"
@@ -394,11 +425,14 @@
           ></div>
 
           <button
-            class="self-start bg-primary text-white font-label-md text-[17px] py-4 px-10 rounded-full shadow-[0_8px_16px_rgba(146,8,131,0.25)] hover:shadow-[0_12px_24px_rgba(146,8,131,0.4)] transform hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2"
+            class="self-start bg-primary text-white font-label-md text-[17px] py-4 px-10 rounded-full shadow-[0_8px_16px_rgba(146,8,131,0.25)] hover:shadow-[0_12px_24px_rgba(146,8,131,0.4)] transform hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none"
+            id="submitBtn"
             type="submit"
           >
-            <span class="material-symbols-outlined text-[22px]">send</span>
-            送信する
+            <span class="material-symbols-outlined text-[22px]" id="submitIcon"
+              >send</span
+            >
+            <span id="submitLabel">送信する</span>
           </button>
         </form>
       </div>
@@ -471,9 +505,12 @@
 
     <script>
       // =====================================================================
-      // 送信先アドレス。実際の受信用アドレスに差し替えてください。
+      // 直接連絡用に画面に表示するアドレス（フォームの送信先は
+      // functions/api/contact.js の環境変数 MAIL_TO で管理しています）
       // =====================================================================
       const CONTACT_EMAIL = "liquid-info@crypto-eight.com";
+      // 問い合わせを受け取る Cloudflare Pages Functions のエンドポイント
+      const CONTACT_ENDPOINT = "/api/contact";
 
       document.addEventListener("DOMContentLoaded", function () {
         // =====================================================
@@ -522,6 +559,9 @@
         const form = document.getElementById("contactForm");
         const statusEl = document.getElementById("formStatus");
         const directMail = document.getElementById("directMail");
+        const submitBtn = document.getElementById("submitBtn");
+        const submitIcon = document.getElementById("submitIcon");
+        const submitLabel = document.getElementById("submitLabel");
 
         directMail.href = "mailto:" + CONTACT_EMAIL;
         directMail.textContent = CONTACT_EMAIL;
@@ -533,15 +573,48 @@
             (kind === "error"
               ? "bg-error-container text-on-error-container"
               : "bg-primary/10 text-primary font-bold");
+          statusEl.scrollIntoView({ behavior: "smooth", block: "center" });
         }
 
-        form.addEventListener("submit", function (e) {
-          e.preventDefault();
+        function setSending(sending) {
+          submitBtn.disabled = sending;
+          submitIcon.textContent = sending ? "progress_activity" : "send";
+          submitIcon.classList.toggle("animate-spin", sending);
+          submitLabel.textContent = sending ? "送信中..." : "送信する";
+        }
 
-          const name = form.name.value.trim();
-          const email = form.email.value.trim();
-          const category = form.category.value;
-          const message = form.message.value.trim();
+        // Turnstile のトークンを取得（未完了なら空文字）
+        function getTurnstileToken() {
+          if (window.turnstile) {
+            try {
+              return window.turnstile.getResponse() || "";
+            } catch (err) {
+              /* ウィジェット未描画時はフィールドから読む */
+            }
+          }
+          const field = form.querySelector('[name="cf-turnstile-response"]');
+          return field ? field.value : "";
+        }
+
+        function resetTurnstile() {
+          if (window.turnstile) {
+            try {
+              window.turnstile.reset();
+            } catch (err) {
+              /* 未描画なら何もしない */
+            }
+          }
+        }
+
+        form.addEventListener("submit", async function (e) {
+          e.preventDefault();
+          if (submitBtn.disabled) return;
+
+          const name = form.elements.name.value.trim();
+          const email = form.elements.email.value.trim();
+          const category = form.elements.category.value;
+          const message = form.elements.message.value.trim();
+          const company = form.elements.company.value.trim();
 
           if (!name || !email || !message) {
             showStatus("必須項目（*）をすべてご入力ください。", "error");
@@ -551,7 +624,7 @@
             showStatus("メールアドレスの形式をご確認ください。", "error");
             return;
           }
-          if (!form.agree.checked) {
+          if (!form.elements.agree.checked) {
             showStatus(
               "プライバシーポリシーへの同意にチェックを入れてください。",
               "error",
@@ -559,32 +632,66 @@
             return;
           }
 
-          const subject = "[お問い合わせ] " + category + " / " + name;
-          const body =
-            "お名前: " +
-            name +
-            "\nメールアドレス: " +
-            email +
-            "\nお問い合わせ種別: " +
-            category +
-            "\n\n" +
-            message +
-            "\n";
+          const token = getTurnstileToken();
+          if (!token) {
+            showStatus(
+              "スパム対策の確認が完了していません。数秒お待ちいただくか、チェックボックスにチェックを入れてから再度送信してください。",
+              "error",
+            );
+            return;
+          }
 
-          window.location.href =
-            "mailto:" +
-            CONTACT_EMAIL +
-            "?subject=" +
-            encodeURIComponent(subject) +
-            "&body=" +
-            encodeURIComponent(body);
+          setSending(true);
+          try {
+            const res = await fetch(CONTACT_ENDPOINT, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                name: name,
+                email: email,
+                category: category,
+                message: message,
+                agree: form.elements.agree.checked,
+                company: company, // ハニーポット（通常は空）
+                token: token,
+              }),
+            });
 
-          showStatus(
-            "メールソフトを起動しました。開いた下書きをそのまま送信してください。起動しない場合は " +
-              CONTACT_EMAIL +
-              " 宛に直接ご連絡ください。",
-            "ok",
-          );
+            let result = {};
+            try {
+              result = await res.json();
+            } catch (err) {
+              /* JSON以外が返った場合は下の分岐でエラー扱い */
+            }
+
+            if (res.ok && result.ok) {
+              form.reset();
+              showStatus(
+                "お問い合わせを送信しました。内容を確認のうえ、通常2〜3営業日以内にご返信いたします。",
+                "ok",
+              );
+            } else {
+              showStatus(
+                (result.error ||
+                  "送信に失敗しました。時間をおいて再度お試しください。") +
+                  "（お急ぎの場合は " +
+                  CONTACT_EMAIL +
+                  " 宛に直接ご連絡ください）",
+                "error",
+              );
+            }
+          } catch (err) {
+            showStatus(
+              "通信エラーが発生しました。ネットワーク環境をご確認のうえ再度お試しください。解決しない場合は " +
+                CONTACT_EMAIL +
+                " 宛に直接ご連絡ください。",
+              "error",
+            );
+          } finally {
+            // Turnstile のトークンは1回限り。成否にかかわらず再取得する
+            resetTurnstile();
+            setSending(false);
+          }
         });
       });
     </script>
