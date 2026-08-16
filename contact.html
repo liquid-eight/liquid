@@ -671,20 +671,25 @@
                 "ok",
               );
             } else {
+              // 原因の切り分け用。開発者ツールのコンソールに詳細を残す
+              console.error("[contact] 送信失敗", res.status, result);
               showStatus(
                 (result.error ||
                   "送信に失敗しました。時間をおいて再度お試しください。") +
                   "（お急ぎの場合は " +
                   CONTACT_EMAIL +
-                  " 宛に直接ご連絡ください）",
+                  " 宛に直接ご連絡ください / コード: " +
+                  (result.code || "http_" + res.status) +
+                  "）",
                 "error",
               );
             }
           } catch (err) {
+            console.error("[contact] 通信エラー", err);
             showStatus(
               "通信エラーが発生しました。ネットワーク環境をご確認のうえ再度お試しください。解決しない場合は " +
                 CONTACT_EMAIL +
-                " 宛に直接ご連絡ください。",
+                " 宛に直接ご連絡ください。（コード: network）",
               "error",
             );
           } finally {
