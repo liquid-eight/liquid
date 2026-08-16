@@ -190,7 +190,7 @@
       <div
         class="flex justify-between items-center px-margin-mobile md:px-margin-desktop h-20 max-w-container-max-width mx-auto"
       >
-        <a class="flex items-center" href="Liquid_website.html">
+        <a class="flex items-center" href="index.html">
           <img
             alt="Liquid Logo"
             class="h-12 w-auto drop-shadow-md"
@@ -406,9 +406,9 @@
 
           <!--
             Turnstile（スパム対策）ウィジェット
-            ★ data-sitekey は Cloudflare ダッシュボード > Turnstile で
-              liquid.crypto-eight.com 用に発行したサイトキーに差し替えてください。
-              現在の値は「常に成功するテスト用キー」です。
+            data-sitekey は Cloudflare ダッシュボード > Turnstile で発行した
+            サイトキー（公開情報）です。対になるシークレットキーは
+            Pages の環境変数 TURNSTILE_SECRET_KEY 側で管理しています。
           -->
           <div
             class="cf-turnstile self-start"
